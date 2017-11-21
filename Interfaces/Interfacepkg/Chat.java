@@ -18,6 +18,7 @@ public class Chat extends JFrame{
 
 		JPanel container = new JPanel();
 		this.add(container);
+		this.add(Menu.getMenu());
 		this.setSize(1000, 500);
 		this.setTitle("Let's get the party started!");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
