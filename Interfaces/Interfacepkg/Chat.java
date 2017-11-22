@@ -9,6 +9,7 @@ package Interfacepkg;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Chat extends JFrame{
 	private static Chat CONTAINER = null;
 	
