@@ -5,30 +5,31 @@
  *  
  */
 package Securitypkg;
+import java.math.BigInteger;
 
 class PrivateKey
 {
 	// key, val pair for decryption
-	private int n;
-	private int d;
+	private BigInteger n;
+	private BigInteger d;
 	
 	// Constructor
 	// @Param - n = computed by the the given prime numbers  p and q
 	// @Param - e = computed through extended euclidian algorithm(big values) or through trial and error(small values)
-	public PrivateKey(int n, int d)
+	public PrivateKey(BigInteger n, BigInteger d)
 	{
 		this.n = n;
 		this.d = d;
 	}
 	
 	// getter
-	public int getN()
+	public BigInteger getN()
 	{
 		return n;
 	}
 	
 	// getter
-	public int getD()
+	public BigInteger getD()
 	{
 		return d;
 	}

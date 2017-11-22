@@ -5,30 +5,31 @@
  *  
  */
 package Securitypkg;
+import java.math.BigInteger;
 
 class PublicKey
 {
 	//  key, val pair for encryption
-	private int n;
-	private int e;
+	private BigInteger n;
+	private BigInteger e;
 	
 	// Constructor
 	// @Param - n = computed by the the given prime numbers  p and q
 	// @Param - e = computed by finding the GCD of p and q
-	public PublicKey(int n, int e)
+	public PublicKey(BigInteger n, BigInteger e)
 	{
 		this.n = n;
 		this.e = e;
 	}
 	
 	// getter
-	public int getN()
+	public BigInteger getN()
 	{
 		return n;
 	}
 	
 	// getter
-	public int getE()
+	public BigInteger getE()
 	{
 		return e;
 	}
