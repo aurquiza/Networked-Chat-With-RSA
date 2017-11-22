@@ -17,27 +17,26 @@ import javax.swing.JOptionPane;
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar implements ActionListener {
 	JMenu menu;
-	JMenu submenu;
 	JMenuItem menuItem;
 	private static Menu m;
 	//JMenu Help box section is divided in two sub menu items for easier use
 	private Menu() {
 		  menu = new JMenu("Menu");
-		  menuItem = new JMenu("Help Menu");
+		  	menuItem = new JMenuItem("Help Menu");
 			menuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(menu, 
 							"Help:\n");
 					}	  
 			});
-		menu.add(menuItem);
+		  menu.add(menuItem);
 			menuItem = new JMenuItem("About"); // battleship game rules
 			menuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(menu, 
 							"mmelni4"
 							+ "\naurqui7"
-							+ "eleon23");
+							+ "\neleon23");
 				}
 			});
 		menu.add(menuItem);
