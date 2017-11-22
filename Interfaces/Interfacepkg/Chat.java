@@ -6,8 +6,11 @@
 
 package Interfacepkg;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class Chat extends JFrame{
@@ -18,6 +21,12 @@ public class Chat extends JFrame{
 	      // Default Constructor only exists to defeat instantiation.
 
 		JPanel container = new JPanel();
+		JLabel clientName = new JLabel("ClientName");
+		JTextField clientNameText = new JTextField(20);
+		JButton connectMe = new JButton("Connect Me");
+		container.add(clientName);
+		container.add(clientNameText);
+		container.add(connectMe);
 		this.add(container);
 		setJMenuBar(Menu.getMenu());
 		this.setSize(1000, 500);
