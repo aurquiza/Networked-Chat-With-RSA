@@ -29,6 +29,9 @@ public class RSA
 	private PublicKey pubKey;
 	private PrivateKey privKey;
 	
+	//encryption and decryption blocks
+	
+	
 	//constructor
 	// @Param p - passed in to compute rsa algorithm, must be prime
 	// @Param q - passed in to compute rsa algorithm, must be prime
@@ -91,6 +94,13 @@ public class RSA
 		potentialD = ((potentialK.multiply(m)).add(BigInteger.valueOf(1))).divide(e);
 		
 		return potentialD;
+	}
+	
+	public BigInteger encryptM()
+	{
+		BigInteger encryptedBlock = BigInteger.ONE;
+		
+		return encryptedBlock;
 	}
 	
 	
