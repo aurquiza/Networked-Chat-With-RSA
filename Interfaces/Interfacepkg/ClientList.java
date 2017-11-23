@@ -1,8 +1,13 @@
 package Interfacepkg;
 
-import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneLayout;
 
 /* 
  * Client list has an updated list of all
@@ -13,14 +18,21 @@ import javax.swing.JScrollPane;
 public class ClientList {
 	
 	private static ClientList clientlist = null;
-	private static JPanel clientScrollPane = null;
+	private static JPanel clientPanel = null;
 	
 	private ClientList(){
-		clientScrollPane = new JPanel();
-		JLabel names = new JLabel("Clients Online:");
-		clientScrollPane.add(names);
-		//populate panel with clients
-		
+		clientPanel = new JPanel();
+		JTextArea visualizerInfo = new JTextArea();
+		visualizerInfo.setEditable(false);
+		visualizerInfo.setLineWrap(true);
+		visualizerInfo.setWrapStyleWord(true);
+		JScrollPane panel = new JScrollPane(visualizerInfo);
+		panel.setLayout(new ScrollPaneLayout());
+		//panel.setSize(new Dimension(400, 500));
+		panel.setBorder(BorderFactory.createTitledBorder("Clients Online:"));
+		panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		//clientPanel.setBounds(40, 60, 40, 40);
+		clientPanel.add(panel, BorderLayout.CENTER);
 	}
 	
 	public static JPanel getClientList() {
@@ -29,6 +41,6 @@ public class ClientList {
 	         clientlist = new ClientList();
 	      }
 
-	      return clientScrollPane;
+	      return clientPanel;
 	   }
 }
