@@ -42,7 +42,7 @@ public class Server
 	
 	public void startRunning(){
 		try{
-			server = new ServerSocket(1245, 100); 
+			server = new ServerSocket(1996, 100); 
 			while(true){
 				try{
 					//Trying to connect and have conversation
@@ -56,16 +56,16 @@ public class Server
 				}
 			}
 		} catch (IOException ioException){
-			ioException.printStackTrace();
+			System.out.println("There is an error with the server");
 		}
 	}
 	//wait for connection, then display connection information
 	private void waitForConnection() throws IOException{
 		System.out.println(" Waiting for someone to connect... \n");
-		//while(true) {
-			connection = server.accept();
-			System.out.println(" Now connected to " + connection.getInetAddress().getHostName());
-		//}
+		
+		connection = server.accept();
+		System.out.println(" Now connected to " + connection.getInetAddress().getHostName());
+		
 		
 	}
 	
@@ -90,6 +90,7 @@ public class Server
 				System.out.println("\n" + message);
 			}catch(ClassNotFoundException classNotFoundException){
 				//showMessage("The user has sent an unknown object!");
+				System.out.println("There is an error in while chatting");
 			}
 		}while(!message.equals("CLIENT - END"));
 	}
@@ -102,7 +103,8 @@ public class Server
 			input.close(); //Closes the input path to the server, from the client.
 			connection.close(); //Closes the connection between you can the client
 		}catch(IOException ioException){
-			ioException.printStackTrace();
+			System.out.println("There is an error in close connection");
+			//ioException.printStackTrace();
 		}
 	}
 	

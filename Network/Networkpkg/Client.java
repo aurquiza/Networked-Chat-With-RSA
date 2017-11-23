@@ -14,6 +14,7 @@ public class Client extends JFrame{
 	private String message = "";
 	private String serverIP;
 	private Socket connection;
+	private int flag = 0;
 
 	
 		//constructor
@@ -49,9 +50,9 @@ public class Client extends JFrame{
 		    		 	}
 		    		 );
 		     
-		   
+
 			
-		     bar.add(FileMenu);
+		    bar.add(FileMenu);
 			chatWindow = new JTextArea();
 			add(new JScrollPane(chatWindow));
 			setSize(300, 150); //Sets the window size
@@ -65,20 +66,19 @@ public class Client extends JFrame{
 			try{
 				connectToServer();
 				setupStreams();
-				whileChatting();
+				new whileChatting();
 			}catch(EOFException eofException){
 				showMessage("\n Client terminated the connection");
 			}catch(IOException ioException){
-				ioException.printStackTrace();
-			}finally{
-				closeConnection();
+				System.out.print("Error with setup");
+				//ioException.printStackTrace();
 			}
 		}
 		
 		//connect to server
 		private void connectToServer() throws IOException{
 			showMessage("Attempting connection... \n");
-			connection = new Socket(InetAddress.getByName(serverIP), 1245);
+			connection = new Socket(InetAddress.getByName(serverIP), 1996);
 			showMessage("Connection Established! Connected to: " + connection.getInetAddress().getHostName());
 		}
 		
@@ -90,20 +90,7 @@ public class Client extends JFrame{
 			input = new ObjectInputStream(connection.getInputStream());
 			showMessage("\n The streams are now set up! \n");
 		}
-		
-		//while chatting with server
-		private void whileChatting() throws IOException{
-			ableToType(true);
-			do{
-				try{
-					message = (String) input.readObject();
-					showMessage("\n" + message);
-				}catch(ClassNotFoundException classNotFoundException){
-					showMessage("Unknown data received!");
-				}
-			}while(!message.equals("SERVER - END"));	
-		}
-		
+
 		//Close connection
 		private void closeConnection(){
 			showMessage("\n Closing the connection!");
@@ -113,7 +100,8 @@ public class Client extends JFrame{
 				input.close();
 				connection.close();
 			}catch(IOException ioException){
-				ioException.printStackTrace();
+				//ioException.printStackTrace();
+				System.out.println("Error with closing");
 			}
 		}
 		
@@ -159,5 +147,50 @@ public class Client extends JFrame{
 			Client clientTest = new Client(ipAdd);
 			clientTest.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
+		
+
+private class whileChatting implements Runnable {
+	
+	public whileChatting() {
+		
+		new Thread(this).start();
+		
+	}
+	
+	public void run() {
+		
+		ableToType(true);
+		
+		do{
+			try{
+				
+				message = (String) input.readObject();
+				if(message == "END") {
+					flag = 1;
+				}
+				else {
+					showMessage("\n" + message);
+				}
+				
+			
+			}catch(ClassNotFoundException classNotFoundException){
+				showMessage("Unknown data received!");
+			}
+			catch(IOException e) {
+				showMessage("Error IOException");
+			}
+			
+		}while(flag == 0);	
+	
+		closeConnection();
+		
+	}
+	
+	
+	
+}
 
 }
+
+
+
