@@ -17,6 +17,7 @@ public class Server
 	private ObjectInputStream input;
 	private ServerSocket server;
 	private Socket connection;
+	private int flag;
 	
 	//constructor
 	public Server(){
@@ -42,33 +43,16 @@ public class Server
 	
 	public void startRunning(){
 		try{
-			server = new ServerSocket(1996, 100); 
-			while(true){
-				try{
-					//Trying to connect and have conversation
-					waitForConnection();
-					setupStreams();
-					whileChatting();
-				}catch(EOFException eofException){
-					System.out.println("\n Server ended the connection! ");
-				} finally{
-					closeConnection(); //Changed the name to something more appropriate
-				}
-			}
+			server = new ServerSocket(1998); 
+			
+			//Trying to connect and have conversation
+			 new waitForConnection();
+			
 		} catch (IOException ioException){
 			System.out.println("There is an error with the server");
 		}
 	}
-	//wait for connection, then display connection information
-	private void waitForConnection() throws IOException{
-		System.out.println(" Waiting for someone to connect... \n");
-		
-		connection = server.accept();
-		System.out.println(" Now connected to " + connection.getInetAddress().getHostName());
-		
-		
-	}
-	
+
 	//get stream to send and receive data
 	private void setupStreams() throws IOException{
 		output = new ObjectOutputStream(connection.getOutputStream());
@@ -118,34 +102,57 @@ public class Server
 			chatWindow.append("\n ERROR: CANNOT SEND MESSAGE, PLEASE RETRY");
 		}
 	}
-	
-//	//update chatWindow
-//	private void showMessage(final String text){
-//		SwingUtilities.invokeLater(
-//			new Runnable(){
-//				public void run(){
-//					chatWindow.append(text);
-//				}
-//			}
-//		);
-//	}
-	
-//	private void ableToType(final boolean tof){
-//		SwingUtilities.invokeLater(
-//			new Runnable(){
-//				public void run(){
-//					userText.setEditable(tof);
-//				}
-//			}
-//		);
-//	}
-//	
+
 	public static void main(String[] args)
 	{
 		Server serverTest = new Server();
 	
 	}
 	
+	private class waitForConnection implements Runnable{
+		
+		public waitForConnection() {
+			
+			new Thread(this).start();
+			
+		}
+		public void run() {
+			while(true) {
+				try {
+					//new Thread(this).start();
+					connection = server.accept();
+					setupStreams();
+					new communicationThread();
+				}
+				catch(IOException e) {
+					System.out.println("There was an error with connecting to another client");
+				}
+			}
+		}
+		
+		
+	}
+	
+	private class communicationThread implements Runnable{
+		
+		public communicationThread() {
+			new Thread(this).start();
+		}
+		
+		public void run() {
+			
+			try {
+				whileChatting();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Theres an error with the communication thread");
+			}
+			
+			
+		}
+		
+		
+	}
 	
 	
 }
