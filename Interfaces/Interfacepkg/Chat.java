@@ -11,13 +11,14 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class Chat extends JFrame{
 	private static Chat CONTAINER = null;
-	
+	private JTextField clientKey;
 	private Chat() {
 
 	      // Default Constructor only exists to defeat instantiation.
@@ -28,15 +29,15 @@ public class Chat extends JFrame{
 		JPanel right = new JPanel();
 		left.setLayout(new BorderLayout());
 
-		JLabel clientName = new JLabel("ClientName");
-		JTextField clientNameText = new JTextField(10);
+		JLabel clientName = new JLabel("Create Keys");
+		clientKey = new JTextField(10);
 		JButton joinChat = new JButton("Join Chat");
 		JButton leaveChat = new JButton("Leave Chat");
 		
 		JPanel loginPart = new JPanel();
 		
 		loginPart.add(clientName);
-		loginPart.add(clientNameText);
+		loginPart.add(clientKey);
 		loginPart.add(joinChat);
 		loginPart.add(leaveChat);	
 		
@@ -53,7 +54,8 @@ public class Chat extends JFrame{
 		left.add(messagePart, BorderLayout.SOUTH);
 		
 		right.add(ClientList.getClientList());
-
+		
+		
 		container.add(left);
 		container.add(right);
 		this.add(container);
@@ -62,8 +64,13 @@ public class Chat extends JFrame{
 		this.setTitle("Let's get the party started!");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
+		initiateOption();
 	   }
 
+	public JTextField getText()
+	{
+		return clientKey;
+	}
 	public static Chat getChatContainer() {
 
 	      if(CONTAINER == null) {
@@ -72,5 +79,19 @@ public class Chat extends JFrame{
 
 	      return CONTAINER;
 	   }
+	void initiateOption() {
+		
+		int choice;
+		String message = "Would you like to generate Public/Private Key pair Yoyrself?\n"
+			    + "Press one of the following buttons.\n"
+			    + "No will generate random prime numbers for you";
+		choice = JOptionPane.showConfirmDialog(null, message, "Generate Key Options", JOptionPane.YES_NO_OPTION);
+	        if (choice == JOptionPane.YES_OPTION) {
+	          JOptionPane.showMessageDialog(null, "HELLO");
+	        }
+	        else {
+	           getText().setEditable(false); // if user chooses NO option, set text field to uneditable
+	        }
+	}
 }
 
