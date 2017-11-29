@@ -22,16 +22,14 @@ public class ClientList {
 	
 	private ClientList(){
 		clientPanel = new JPanel();
-		JTextArea visualizerInfo = new JTextArea();
-		visualizerInfo.setEditable(false);
-		visualizerInfo.setLineWrap(true);
-		visualizerInfo.setWrapStyleWord(true);
-		JScrollPane panel = new JScrollPane(visualizerInfo);
+		JTextArea list = new JTextArea(23, 30);
+		list.setEditable(false);
+		list.setLineWrap(true);
+		list.setWrapStyleWord(true);
+		JScrollPane panel = new JScrollPane(list);
 		panel.setLayout(new ScrollPaneLayout());
-		//panel.setSize(new Dimension(400, 500));
 		panel.setBorder(BorderFactory.createTitledBorder("Clients Online:"));
 		panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		//clientPanel.setBounds(40, 60, 40, 40);
 		clientPanel.add(panel, BorderLayout.CENTER);
 	}
 	
@@ -40,7 +38,6 @@ public class ClientList {
 	      if(clientlist == null) {
 	         clientlist = new ClientList();
 	      }
-
 	      return clientPanel;
 	   }
 }
