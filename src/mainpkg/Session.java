@@ -1,13 +1,15 @@
 package mainpkg;
+import Interfacepkg.Chat;
 import Securitypkg.*;
-import java.math.BigInteger;
 
 public class Session {
 
 	public static void main(String[] args)
 	{
+		Chat.getChatContainer();
 		System.out.println("Testing standard out");
-		RSA sec = new RSA(BigInteger.valueOf(149),BigInteger.valueOf(157));
+		//@SuppressWarnings("unused")
+		//RSA sec = new RSA(149,157);
 	}
 
 }
