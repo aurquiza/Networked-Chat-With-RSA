@@ -6,8 +6,6 @@ import java.awt.event.*;
 import javax.swing.*;
 public class Client extends JFrame
 {
-	
-
 	//private JLabel connect;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
