@@ -8,7 +8,9 @@ public class Session {
 	{
 		Chat.getChatContainer();
 		System.out.println("Testing standard out");
-		RSA sec = new RSA(149,157);
+		//@SuppressWarnings("unused")
+		RSA sec;// = new RSA(149,157); 
+
 	}
 
 }

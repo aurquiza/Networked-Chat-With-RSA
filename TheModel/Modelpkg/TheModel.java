@@ -1,5 +1,9 @@
 package Modelpkg;
 
-public class TheModel {
-
+public class TheModel
+{
+	public TheModel()
+	{
+		
+	}
 }
