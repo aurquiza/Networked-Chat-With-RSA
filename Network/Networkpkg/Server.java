@@ -7,10 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.*;
 public class Server
 {
 	private ServerSocket server;
+	private Vector<clientInfo> clientList  = new Vector<clientInfo>();
 	
 	//constructor
 	public Server()
@@ -31,55 +32,6 @@ public class Server
 			System.out.println("There is an error with the server");
 		}
 	}
-
-	//get stream to send and receive data
-//	private void setupStreams() throws IOException{
-//		output = new ObjectOutputStream(connection.getOutputStream());
-//		
-//		
-//		
-//		//showMessage("\n Streams are now setup \n");
-//	}
-	
-//	//during the chat conversation
-//	private void whileChatting() throws IOException{
-//		String message = " You are now connected! ";
-//		sendMessage(message);
-//		//ableToType(true);
-//		do{
-//			try{
-////				message = (String) input.readObject();
-//				System.out.println("\n" + message);
-//			}catch(ClassNotFoundException classNotFoundException){
-//				//showMessage("The user has sent an unknown object!");
-//				System.out.println("There is an error in while chatting");
-//			}
-//		}while(!message.equals("CLIENT - END"));
-//	}
-	
-//	public void closeConnection(){
-//		//showMessage("\n Closing Connections... \n");
-//		//ableToType(false);
-//		try{
-//			output.close(); //Closes the output path to the client
-//			input.close(); //Closes the input path to the server, from the client.
-//			connection.close(); //Closes the connection between you can the client
-//		}catch(IOException ioException){
-//			System.out.println("There is an error in close connection");
-//			//ioException.printStackTrace();
-//		}
-//	}
-	
-//	//Send a mesage to the client
-//	private void sendMessage(String message){
-//		try{
-//			output.writeObject("SERVER - " + message);
-//			output.flush();
-//			System.out.println("\nSERVER -" + message);
-//		}catch(IOException ioException){
-//			chatWindow.append("\n ERROR: CANNOT SEND MESSAGE, PLEASE RETRY");
-//		}
-//	}
 
 	public static void main(String[] args)
 	{
@@ -103,6 +55,8 @@ public class Server
 				try 
 				{
 					new communicationThread(server.accept());
+					//add client info to the clientList vector;
+					
 				}
 				catch(IOException e) 
 				{
@@ -128,8 +82,7 @@ public class Server
 			
 			try 
 			{
-				//PrintWriter out = new PrintWriter(connection.getOutputStream(), true);
-				//BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
 				ObjectOutputStream out = new ObjectOutputStream(connection.getOutputStream());
 				ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 				
