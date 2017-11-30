@@ -5,7 +5,7 @@ package Interfacepkg;
  * created once.
  * Contains "info" and "about" boxes 
  */
-
+ 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

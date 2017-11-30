@@ -13,7 +13,7 @@ import javax.swing.ScrollPaneLayout;
  * Client list has an updated list of all
  * users connected to chat. Only clients that are currently connected
  * will be shown. Since list is same for all users, Singleton design is used
- */
+ */ 
 
 public class ClientList {
 	
