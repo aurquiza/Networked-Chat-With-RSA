@@ -2,7 +2,8 @@ package mainpkg;
 import Interfacepkg.Chat;
 import Securitypkg.*;
 
-public class Session {
+public class Session 
+{
 
 	public static void main(String[] args)
 	{
@@ -10,7 +11,6 @@ public class Session {
 		System.out.println("Testing standard out");
 		//@SuppressWarnings("unused")
 		RSA sec;// = new RSA(149,157); 
-
 	}
 
 }
