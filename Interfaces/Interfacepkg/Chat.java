@@ -1,4 +1,4 @@
-/* Chat class contains the Frame for all UI elements
+ /* Chat class contains the Frame for all UI elements
  * and implements a Singleton design pattern
  * since we'll only need one instance of the
  * "parent" container for each client

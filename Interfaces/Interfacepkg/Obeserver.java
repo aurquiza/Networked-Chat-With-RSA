@@ -1,5 +1,6 @@
 package Interfacepkg;
 
-public class Obeserver {
+public class Obeserver 
+{
 
 }

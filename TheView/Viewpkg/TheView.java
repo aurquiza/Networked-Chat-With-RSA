@@ -1,5 +1,6 @@
 package Viewpkg;
 
-public class TheView {
+public class TheView 
+{
 
 }

@@ -6,18 +6,20 @@
 
 package Securitypkg;
 
+import java.math.BigInteger;
+
 class EuclidianAlgorithm 
 {
 	// instances that are used to compute and
 	// store the greatest common divisor
-	private int GCD;
-	private int prime1;
-	private int prime2;
+	private BigInteger GCD;
+	private BigInteger prime1;
+	private BigInteger prime2;
 	
 	// constructor
 	// @Param - prime1 - first number given
 	// @Param - prime2 - second number given
-	public EuclidianAlgorithm(int prime1, int prime2)
+	public EuclidianAlgorithm(BigInteger prime1, BigInteger prime2)
 	{
 		this.prime1 = prime1;
 		this.prime2 = prime2;
@@ -26,7 +28,7 @@ class EuclidianAlgorithm
 	// set new numbers for the private instances
 	// @Param - num1 - first int passed in
 	// @Param - num2 - second int passed in
-	public void setNewNumbers(int num1, int num2)
+	public void setNewNumbers(BigInteger num1, BigInteger num2)
 	{
 		prime1 = num1;
 		prime2 = num2;
@@ -37,14 +39,14 @@ class EuclidianAlgorithm
 	// calls the algorithm accordingly
 	public void computeGCD()
 	{
-		if(prime1 > prime2)
+		if(prime1.compareTo(prime2) > 0)
 			GCD = startAlgorithm(prime1, prime2);
 		else
 			GCD = startAlgorithm(prime2, prime1);
 	}
 	
 	// getter
-	public int getGCD()
+	public BigInteger getGCD()
 	{
 		return GCD;
 	}
@@ -52,19 +54,19 @@ class EuclidianAlgorithm
 	// algorithm that will compute the greatest common divisor and return it
 	// @Param - biggest - assumes the biggest integer is passed between the two parameters
 	// @Param - smallest - assumes the smallest integer is passed between the two parameters
-	private int startAlgorithm(int biggest, int smallest)
+	private BigInteger startAlgorithm(BigInteger biggest, BigInteger smallest)
 	{
-		int remainder = biggest % smallest;
-		int prev = remainder;
+		BigInteger remainder = biggest.mod(smallest);// % smallest;
+		BigInteger prev = remainder;
 		
-		while(remainder != 0)
+		while(!remainder.equals(BigInteger.ZERO))
 		{
 			prev = remainder;
 			
 			biggest = smallest;
 			smallest = remainder;
 			
-			remainder = biggest % smallest;
+			remainder = biggest.mod(smallest);
 		}
 		
 		
