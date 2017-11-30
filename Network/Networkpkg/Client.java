@@ -142,7 +142,7 @@ public class Client extends JFrame{
 		public static void main(String[] args)
 		{
 
-			String ipAdd = "127.0.0.1";
+			String ipAdd = "10.107.214.141";
 			
 			Client clientTest = new Client(ipAdd);
 			clientTest.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -191,6 +191,3 @@ private class whileChatting implements Runnable {
 }
 
 }
-
-
-
