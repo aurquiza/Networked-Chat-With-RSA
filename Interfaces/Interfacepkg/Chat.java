@@ -47,8 +47,8 @@ public class Chat extends JFrame implements ActionListener{
 	  private PrintWriter out;
 	  private BufferedReader in;
 	  
-	  BigInteger publicKey;
-	  BigInteger privateKey;
+	  BigInteger firstPrime;
+	  BigInteger secondPrime;
 	
 	private Chat() {
 
@@ -114,10 +114,6 @@ public class Chat extends JFrame implements ActionListener{
 		initiateOption();
 	   }
 
-	private void setNameText(String name)
-	{
-		this.clientName.setText(name);;
-	}
 	
 	public JTextField getNameText()
 	{
@@ -131,26 +127,27 @@ public class Chat extends JFrame implements ActionListener{
 
 	      return CONTAINER;
 	   }
-	
-	public BigInteger getPublicKey()
+	// first and second prime numbers
+	// are generated from file or from user input
+	public BigInteger getFirstPrime()
 	{
-		return this.publicKey;
+		return this.firstPrime;
 	}
 	
-	public BigInteger getPrivateKey()
+	public BigInteger getSecondPrime()
 	{
-		return this.privateKey;
+		return this.secondPrime;
 	}
 	
-	private void setPublicKey(String key)
+	private void setFirstPrime(String num)
 	{
 
-		this.publicKey = new BigInteger(key);
+		this.firstPrime = new BigInteger(num);
 	}
 	
-	private void setPrivateKey(String key)
+	private void setSecondPrime(String num)
 	{
-		this.privateKey = new BigInteger(key);
+		this.secondPrime = new BigInteger(num);
 	}
 	
 	void readPrimes(String fileName)
@@ -179,10 +176,10 @@ public class Chat extends JFrame implements ActionListener{
         	   System.out.println(counter);
         	   Random rand = new Random();
         	   int value = rand.nextInt(counter-1);
-	           setPublicKey(primes.get(value));
+	           setFirstPrime(primes.get(value));
 	           
 	           value = rand.nextInt(counter-1);
-	           setPrivateKey(primes.get(value));
+	           setSecondPrime(primes.get(value));
 	           
 	           bufferedReader.close();
 	           fileReader.close();
@@ -227,14 +224,12 @@ public class Chat extends JFrame implements ActionListener{
 		        }
 		        else
 		        {
-		        	setPublicKey(JOptionPane.showInputDialog(this, "Type in your Public Key:"));
-		        	setPrivateKey(JOptionPane.showInputDialog(this, "Type in your Private Key:"));
+		        	setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
+		        	setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
 		        }
 	        }
 	        else {
-
 	        	readPrimes("Resource\\primeNumbers.rsc");
-	        	//getText().setEditable(false); // if user chooses NO option, set text field to uneditable
 	        }
 	}
 
