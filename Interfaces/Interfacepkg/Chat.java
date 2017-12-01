@@ -6,15 +6,16 @@
 
 package Interfacepkg;
 
-/*import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;*/
-import java.net.*; 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.net.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Random;
 import java.io.*; 
 import java.awt.*;
 import java.awt.event.*;
@@ -33,7 +34,7 @@ public class Chat extends JFrame implements ActionListener{
 	  private JTextField addressInfo;
 	  private JTextField portInfo;
 	  private JTextField message;
-	  private JTextField clientKey;
+	  private JTextField clientName;
 	  //private JLabel status;
 
 
@@ -44,7 +45,10 @@ public class Chat extends JFrame implements ActionListener{
 	  private ServerSocket serverSocket;
 	  private Socket commSocket;
 	  private PrintWriter out;
-	  private BufferedReader in;	
+	  private BufferedReader in;
+	  
+	  BigInteger publicKey;
+	  BigInteger privateKey;
 	
 	private Chat() {
 
@@ -57,17 +61,18 @@ public class Chat extends JFrame implements ActionListener{
 		JPanel right = new JPanel();
 		left.setLayout(new BorderLayout());
 		connectionPanel.setLayout(new GridLayout(2,4));
-		JLabel createKeys = new JLabel(" Create Keys");
-		clientKey = new JTextField();
+		JLabel createName = new JLabel(" Your Name");
+		clientName = new JTextField();
 		connectButton = new JButton("Join Chat");
 		JButton leaveChat = new JButton("Leave Chat");
 		serverAddressPrompt = new JLabel(" Server Address");
 		serverPortPrompt = new JLabel(" Server Port");
 		addressInfo = new JTextField();
 		portInfo = new JTextField();
-		
-		connectionPanel.add(createKeys);
-		connectionPanel.add(clientKey);
+		clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
+		clientName.setEnabled (false);
+		connectionPanel.add(createName);
+		connectionPanel.add(clientName);
 		connectionPanel.add(connectButton);
 		connectionPanel.add(leaveChat);	
 		connectionPanel.add(serverAddressPrompt);
@@ -109,9 +114,14 @@ public class Chat extends JFrame implements ActionListener{
 		initiateOption();
 	   }
 
-	public JTextField getText()
+	private void setNameText(String name)
 	{
-		return clientKey;
+		this.clientName.setText(name);;
+	}
+	
+	public JTextField getNameText()
+	{
+		return clientName;
 	}
 	public static Chat getChatContainer() {
 
@@ -121,18 +131,101 @@ public class Chat extends JFrame implements ActionListener{
 
 	      return CONTAINER;
 	   }
+	
+	public BigInteger getPublicKey()
+	{
+		return this.publicKey;
+	}
+	
+	public BigInteger getPrivateKey()
+	{
+		return this.privateKey;
+	}
+	
+	private void setPublicKey(String key)
+	{
+
+		this.publicKey = new BigInteger(key);
+	}
+	
+	private void setPrivateKey(String key)
+	{
+		this.privateKey = new BigInteger(key);
+	}
+	
+	void readPrimes(String fileName)
+	{
+		 
+		String line;
+		ArrayList<String> primes = new ArrayList<String>(); // change size later
+		int counter = 0;
+		
+		try {
+	           // FileReader reads text files in the default encoding.
+	           FileReader fileReader = 
+	               new FileReader(fileName);
+
+	           // Always wrap FileReader in BufferedReader.
+	           BufferedReader bufferedReader = 
+	               new BufferedReader(fileReader);
+
+	           // read one line from file
+	           
+	           while((line = bufferedReader.readLine()) != null) {
+	        	   primes.add(line);
+	        	   counter++;
+	           } 
+	           
+        	   System.out.println(counter);
+        	   Random rand = new Random();
+        	   int value = rand.nextInt(counter-1);
+	           setPublicKey(primes.get(value));
+	           
+	           value = rand.nextInt(counter-1);
+	           setPrivateKey(primes.get(value));
+	           
+	           bufferedReader.close();
+	           fileReader.close();
+	       }
+	       catch(FileNotFoundException ex) {
+	           System.out.println(
+	               "Unable to open file '" + 
+	               fileName + "'");                
+	       }
+	       catch(IOException ex) {
+	           System.out.println(
+	               "Error reading file '" 
+	               + fileName + "'");                  
+	           // Or we could just do this: 
+	           ex.printStackTrace();
+	       }
+	   }
+	
 	void initiateOption() {
 		
 		int choice;
+		String fileName;
 		String message = "Would you like to generate Public/Private Key pair Yourself?\n"
 			    + "Press Yes to create prime numbers\n"
 			    + "No will generate random prime numbers";
 		choice = JOptionPane.showConfirmDialog(null, message, "Generate Key Options", JOptionPane.YES_NO_OPTION);
 	        if (choice == JOptionPane.YES_OPTION) {
+	        	JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); // specify current working directory
+				int result = fileChooser.showOpenDialog(this);
+				if (result == JFileChooser.APPROVE_OPTION) {
+				    File selectedFile = fileChooser.getSelectedFile();
+				    fileName = selectedFile.getName(); // store filename 
+				    System.out.println("Selected file: " + fileName  +  ", and path: "+ selectedFile.getAbsolutePath());
+				    System.out.println(selectedFile.getAbsolutePath());
+				    readPrimes(selectedFile.getAbsolutePath());
+				}
 	          return;
 	        }
 	        else {
-	           getText().setEditable(false); // if user chooses NO option, set text field to uneditable
+
+	        	readPrimes("Resource\\primeNumbers.rsc");
+	        	//getText().setEditable(false); // if user chooses NO option, set text field to uneditable
 	        }
 	}
 
