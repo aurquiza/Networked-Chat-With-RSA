@@ -7,13 +7,9 @@
 package Interfacepkg;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 import java.io.*; 
@@ -47,12 +43,16 @@ public class Chat extends JFrame implements ActionListener{
 	  private PrintWriter out;
 	  private BufferedReader in;
 	  
-	  BigInteger firstPrime;
-	  BigInteger secondPrime;
+	  static BigInteger firstPrime;
+	  static BigInteger secondPrime;
+	  
+	  // vector of initial values sent to server, contains:
+	  // client name, public and private keys, server address and port
+	  
 	
 	private Chat() {
 
-	      // Default Constructor only exists to defeat instantiation.
+	    // Default Constructor only exists to defeat instantiation.
 		connected = false;
 		JPanel container = new JPanel();
 		container.setLayout(new GridLayout(1,2));
@@ -129,25 +129,25 @@ public class Chat extends JFrame implements ActionListener{
 	   }
 	// first and second prime numbers
 	// are generated from file or from user input
-	public BigInteger getFirstPrime()
+	public static BigInteger getFirstPrime()
 	{
-		return this.firstPrime;
+		return firstPrime;
 	}
 	
-	public BigInteger getSecondPrime()
+	public static BigInteger getSecondPrime()
 	{
-		return this.secondPrime;
+		return secondPrime;
 	}
 	
 	private void setFirstPrime(String num)
 	{
 
-		this.firstPrime = new BigInteger(num);
+		firstPrime = new BigInteger(num);
 	}
 	
 	private void setSecondPrime(String num)
 	{
-		this.secondPrime = new BigInteger(num);
+		secondPrime = new BigInteger(num);
 	}
 	
 	void readPrimes(String fileName)
@@ -201,7 +201,7 @@ public class Chat extends JFrame implements ActionListener{
 	void initiateOption() {
 		
 		int choice;
-		String fileName;
+		//String fileName;
 		int secondChoice;
 		String message = "Would you like to generate Public/Private Key pair Yourself?\n"
 			    + "Press Yes to create prime numbers\n"
@@ -215,9 +215,9 @@ public class Chat extends JFrame implements ActionListener{
 					int result = fileChooser.showOpenDialog(this);
 					if (result == JFileChooser.APPROVE_OPTION) {
 					    File selectedFile = fileChooser.getSelectedFile();
-					    fileName = selectedFile.getName(); // store filename 
-					    System.out.println("Selected file: " + fileName  +  ", and path: "+ selectedFile.getAbsolutePath());
-					    System.out.println(selectedFile.getAbsolutePath());
+					    //fileName = selectedFile.getName(); // store filename 
+					    //System.out.println("Selected file: " + fileName  +  ", and path: "+ selectedFile.getAbsolutePath());
+					    //System.out.println(selectedFile.getAbsolutePath());
 					    readPrimes(selectedFile.getAbsolutePath());
 					}
 		          return;
