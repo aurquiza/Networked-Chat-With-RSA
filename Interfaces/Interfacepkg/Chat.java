@@ -25,6 +25,7 @@ public class Chat extends JFrame implements ActionListener{
 	  private JButton sendButton; // send message
 	  //private JButton serverButton;
 	  private JButton connectButton; // join chat
+	  private JButton leaveChat;
 	  private JLabel serverAddressPrompt;
 	  private JLabel serverPortPrompt;
 	  private JTextField addressInfo;
@@ -64,7 +65,9 @@ public class Chat extends JFrame implements ActionListener{
 		JLabel createName = new JLabel(" Your Name");
 		clientName = new JTextField();
 		connectButton = new JButton("Join Chat");
-		JButton leaveChat = new JButton("Leave Chat");
+		connectButton.setEnabled(false); //set enabled until user inputs all data
+		leaveChat = new JButton("Leave Chat");
+		leaveChat.setEnabled(false); 
 		serverAddressPrompt = new JLabel(" Server Address");
 		serverPortPrompt = new JLabel(" Server Port");
 		addressInfo = new JTextField();
@@ -111,11 +114,21 @@ public class Chat extends JFrame implements ActionListener{
 		this.setTitle("Networked Chat with RSA");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
-		initiateOption();
+		initiateOption(); // get prime numbers generated based on user"s choice
+		getConnectionInfo(); // get port and IP address from user input
 	   }
 
+	public JTextField getIPaddress()
+	{
+		return addressInfo;
+	}
 	
-	public JTextField getNameText()
+	public JTextField getPort()
+	{
+		return portInfo;
+	}
+	
+	public JTextField getName()
 	{
 		return clientName;
 	}
@@ -231,6 +244,12 @@ public class Chat extends JFrame implements ActionListener{
 	        else {
 	        	readPrimes("Resource\\primeNumbers.rsc");
 	        }
+	}
+	
+	void getConnectionInfo()
+	{
+		addressInfo.setText(JOptionPane.showInputDialog(this, "Type in IP Address:"));
+		portInfo.setText(JOptionPane.showInputDialog(this, "Type in Port:"));
 	}
 
 	@Override
