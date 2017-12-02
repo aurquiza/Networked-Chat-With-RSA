@@ -128,10 +128,11 @@ public class Chat extends JFrame implements ActionListener{
 		return portInfo;
 	}
 	
-	public JTextField getName()
+	public JTextField getNameInfo()
 	{
 		return clientName;
 	}
+	
 	public static Chat getChatContainer() {
 
 	      if(CONTAINER == null) {
@@ -250,6 +251,8 @@ public class Chat extends JFrame implements ActionListener{
 	{
 		addressInfo.setText(JOptionPane.showInputDialog(this, "Type in IP Address:"));
 		portInfo.setText(JOptionPane.showInputDialog(this, "Type in Port:"));
+		connectButton.setEnabled(true);
+		leaveChat.setEnabled(true);
 	}
 
 	@Override
