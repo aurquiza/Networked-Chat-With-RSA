@@ -14,8 +14,11 @@ public class Session
 		Vector <BigInteger> block = new Vector<BigInteger>();
 
 		Chat.getChatContainer();
+    
+		System.out.println("Testing standard out");
+		RSA sec = new RSA(Chat.getFirstPrime(), Chat.getSecondPrime()); 
+		System.out.println("First: " + Chat.getFirstPrime() + " Second: " + Chat.getSecondPrime());
 
-		RSA sec;// = new RSA(149,157); 
 	}
 
 }
