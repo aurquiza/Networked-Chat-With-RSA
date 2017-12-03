@@ -129,14 +129,18 @@ public class RSA
 			{
 				total = total.add(calculation);
 			}
-//			
-//			System.out.println("Calculation: " + calculation);
-//			System.out.println("total: " + total);
+
 		}
 		
 		if(i-1 % 4 != 0)
 			block.add(total);
 		
+		for(int j = 0; j < block.size(); j++)
+		{
+			 BigInteger b = block.elementAt(j);
+			 BigInteger encodedBlock = b.modPow(e, n);
+			 block.set(j, encodedBlock);
+		}
 //		System.out.println(block.size());
 //		
 //		for(i = 0; i < block.size(); i++)
