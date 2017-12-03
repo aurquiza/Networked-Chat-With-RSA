@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Resource</name>
+			<type>2</type>
+			<location>C:/Users/User/git/p5/Networked-Chat-With-RSA/Resource</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -10,6 +10,8 @@
 package Securitypkg;
 
 import java.math.BigInteger;
+import java.util.*;
+
 
 public class RSA
 {
@@ -29,8 +31,11 @@ public class RSA
 	private PublicKey pubKey;
 	private PrivateKey privKey;
 	
-	//encryption and decryption blocks
+	// validity check for caller of the object
+	private boolean validPrimes = false;
 	
+	//encryption and decryption blocks
+	Vector <BigInteger> block = new Vector<BigInteger>();
 	
 	//constructor
 	// @Param p - passed in to compute rsa algorithm, must be prime
@@ -51,6 +56,8 @@ public class RSA
 		pubKey = new PublicKey(n, e);
 		privKey = new PrivateKey(n, d);
 	}
+	
+	
 	
 	// This attempts to find a potential 'e' for the RSA algorithm 
 	// where the gcd for e and m is 1.
@@ -96,11 +103,50 @@ public class RSA
 		return potentialD;
 	}
 	
-	public BigInteger encryptM()
-	{
-		BigInteger encryptedBlock = BigInteger.ONE;
+	public Vector<BigInteger> encryptM(String msg)
+	{	
+		// initialize variables for 
+		int asciiVer[] = new int[msg.length()];
+		BigInteger total = BigInteger.ZERO;
+		int i = 0;
 		
-		return encryptedBlock;
+		for(i = 0; i < msg.length(); i++)
+			asciiVer[i] = (int) msg.charAt(i);
+		
+		
+		for(i = 0; i < asciiVer.length; i++)
+		{
+			BigInteger calculation = ( BigInteger.valueOf(asciiVer[i]) ).multiply( ( BigInteger.valueOf(128) ).pow(i % 4) );
+			
+			
+			if( (i != 0) && (i % 4 == 0) )
+			{
+				block.add(total);
+				total = BigInteger.ZERO;
+				total = total.add(calculation);
+			}
+			else
+			{
+				total = total.add(calculation);
+			}
+
+		}
+		
+		if(i-1 % 4 != 0)
+			block.add(total);
+		
+		for(int j = 0; j < block.size(); j++)
+		{
+			 BigInteger b = block.elementAt(j);
+			 BigInteger encodedBlock = b.modPow(e, n);
+			 block.set(j, encodedBlock);
+		}
+//		System.out.println(block.size());
+//		
+//		for(i = 0; i < block.size(); i++)
+//			System.out.println(block.elementAt(i));
+			
+		return block;
 	}
 	
 	
@@ -110,6 +156,14 @@ public class RSA
 		BigInteger publicKey[] = new BigInteger[]{pubKey.getN(),pubKey.getE()};
 		return publicKey;
 	}
+	
+	// returns true if values passed into constructor passed the primality test
+	// returns false if values passed failed the primality test
+	public boolean isInputValid()
+	{
+		return false;
+	}
+	
 	
 	//--------------------------------------------------------------------------------
 	//--------------------------------------------------------------------------------

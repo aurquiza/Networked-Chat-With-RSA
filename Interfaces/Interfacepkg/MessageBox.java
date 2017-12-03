@@ -5,12 +5,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
-public class MessageBox extends JPanel {
+public class MessageBox extends JPanel
+{
 
-	public MessageBox() {
-		JTextArea messageHistory = new JTextArea(20, 35);
+	JTextArea messageHistory;
+	
+	public MessageBox()
+	{
+		messageHistory = new JTextArea(20, 35);
 		messageHistory.setEditable(false);
 		this.add(new JScrollPane(messageHistory));
+	}
+	
+	public void addMessage(String msg)
+	{
+		messageHistory.append(msg + "\n");
 	}
 	
 }
