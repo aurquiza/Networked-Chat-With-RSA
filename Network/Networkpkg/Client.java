@@ -4,183 +4,143 @@ import java.net.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-public class Client extends JFrame{
-	
-	private JTextField userText;
-	private JTextArea chatWindow;
+public class Client extends JFrame
+{
 	//private JLabel connect;
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private String message = "";
-	private String serverIP;
+	
+	private String host;
+	private String port;
+	
 	private Socket connection;
-	private int flag = 0;
+	private boolean isConnected = false;
 
 	
 		//constructor
-		public Client(String host){
-			super("Client");
-			serverIP = host;
-			userText = new JTextField();
-			userText.setEditable(false);
-			userText.addActionListener(
-					new ActionListener(){
-					public void actionPerformed(ActionEvent event){
-						sendMessage(event.getActionCommand());
-						userText.setText("");
-					}
-				}
-			);
-			add(userText, BorderLayout.NORTH);
-			
-		     JMenuBar bar = new JMenuBar();
-		     setJMenuBar(bar);
-		     JMenu FileMenu = new JMenu( "File");
-		     
-		     JMenuItem connect = new JMenuItem( "Connect" );
-		     FileMenu.add(connect);
-		     
-		     connect.addActionListener(
-		    		 	new ActionListener() {
-		    		 		public void actionPerformed(ActionEvent event) {
-		    		 			startRunning();
-		    		 		}
-		    		 	
-		    		 	
-		    		 	}
-		    		 );
-		     
-
-			
-		    bar.add(FileMenu);
-			chatWindow = new JTextArea();
-			add(new JScrollPane(chatWindow));
-			setSize(300, 150); //Sets the window size
-			setVisible(true);
-			
-			//startRunning();
+		public Client(String host, String port)
+		{
+			this.host = host;
+			this.port = port;
+			startRunning();
+		}
+		
+		public boolean checkConnectionStatus()
+		{
+			return isConnected;
 		}
 		
 		//connect to server
-		public void startRunning(){
-			try{
+		public void startRunning()
+		{
+			try
+			{
 				connectToServer();
+				
+				if(connection == null)
+				{
+					System.err.println("connection socket is null!");
+					isConnected = false;
+					return;
+				}
+				
 				setupStreams();
 				new whileChatting();
-			}catch(EOFException eofException){
-				showMessage("\n Client terminated the connection");
-			}catch(IOException ioException){
-				System.out.print("Error with setup");
-				//ioException.printStackTrace();
+			}
+			catch(EOFException eofException)
+			{
+				System.err.println("Client terminated the connection");
+			}
+			catch(IOException ioException)
+			{
+				System.err.print("Error with setup");
+				isConnected = false;
 			}
 		}
 		
 		//connect to server
-		private void connectToServer() throws IOException{
-			showMessage("Attempting connection... \n");
-			connection = new Socket(InetAddress.getByName(serverIP), 1998);
-			showMessage("Connection Established! Connected to: " + connection.getInetAddress().getHostName());
+		private void connectToServer() throws IOException
+		{
+			try 
+			{
+				System.out.println("Inside Client: " + port + " " + host);
+				connection = new Socket(host, Integer.parseInt(port));
+				isConnected = true;
+			}
+			catch (NumberFormatException e)
+			{
+
+				System.err.println("NumberFormatException Caught!");
+			}
 		}
 		
 		//set up streams
-		private void setupStreams() throws IOException{
+		private void setupStreams() throws IOException
+		{
 			output = new ObjectOutputStream(connection.getOutputStream());
 			output.flush();
 			
 			input = new ObjectInputStream(connection.getInputStream());
-			showMessage("\n The streams are now set up! \n");
 		}
 
 		//Close connection
-		private void closeConnection(){
-			showMessage("\n Closing the connection!");
-			ableToType(false);
-			try{
+		private void closeConnection()
+		{
+			try
+			{
 				output.close();
 				input.close();
 				connection.close();
-			}catch(IOException ioException){
-				//ioException.printStackTrace();
-				System.out.println("Error with closing");
+			}
+			catch(IOException ioException)
+			{
+
+				System.err.println("Error with closing");
 			}
 		}
 		
 		//send message to server
-		private void sendMessage(String message){
-			try{
+		public void sendMessage(String message)
+		{
+			try
+			{
 				output.writeObject("CLIENT - " + message);
 				output.flush();
-				showMessage("\nCLIENT - " + message);
-			}catch(IOException ioException){
-				chatWindow.append("\n Oops! Something went wrong!");
+			}
+			catch(IOException ioException)
+			{
+				System.err.println("Client failed sending the message");
 			}
 		}
 		
-		//update chat window
-		private void showMessage(final String message){
-			SwingUtilities.invokeLater(
-				new Runnable(){
-					public void run(){
-						chatWindow.append(message);
-					}
-				}
-			);
-		}
-		
-		//allows user to type
-		private void ableToType(final boolean tof){
-			SwingUtilities.invokeLater(
-				new Runnable(){
-					public void run(){
-						userText.setEditable(tof);
-					}
-				}
-			);
-		}
-		
-		
-		public static void main(String[] args)
-		{
 
-			String ipAdd = "10.107.214.141";
-			
-			Client clientTest = new Client(ipAdd);
-			clientTest.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		}
-		
-
-private class whileChatting implements Runnable {
+private class whileChatting implements Runnable
+{
 	
-	public whileChatting() {
-		
+	public whileChatting() 
+	{
 		new Thread(this).start();
-		
 	}
 	
-	public void run() {
-		
-		ableToType(true);
+	public void run() 
+	{
 		
 		do{
-			try{
-				
+			try
+			{
 				message = (String) input.readObject();
-				if(message == "END") {
-					flag = 1;
-				}
-				else {
-					showMessage("\n" + message);
-				}
-				
-			
-			}catch(ClassNotFoundException classNotFoundException){
-				showMessage("Unknown data received!");
 			}
-			catch(IOException e) {
-				showMessage("Error IOException");
+			catch(ClassNotFoundException classNotFoundException)
+			{
+				System.err.println("ClassNotFound Exception triggered...");
+			}
+			catch(IOException e) 
+			{
+				System.err.println("IO Exception triggered...");
 			}
 			
-		}while(flag == 0);	
+		}while(isConnected);	
 	
 		closeConnection();
 		

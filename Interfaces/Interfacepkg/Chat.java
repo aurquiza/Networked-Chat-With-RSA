@@ -5,6 +5,8 @@
  */
 
 package Interfacepkg;
+import Controllerpkg.*;
+import Networkpkg.Client;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,6 +14,7 @@ import java.math.BigInteger;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Random;
+
 import java.io.*; 
 import java.awt.*;
 import java.awt.event.*;
@@ -25,15 +28,16 @@ public class Chat extends JFrame implements ActionListener{
 	  private JButton sendButton; // send message
 	  //private JButton serverButton;
 	  private JButton connectButton; // join chat
-	  private JButton leaveChat;
+	  private JButton leaveChat; // leave chat
+
 	  private JLabel serverAddressPrompt;
 	  private JLabel serverPortPrompt;
 	  private JTextField addressInfo;
 	  private JTextField portInfo;
 	  private JTextField message;
+
 	  private JTextField clientName;
 	  //private JLabel status;
-
 
 	  // Network Items
 	  private boolean running;
@@ -50,11 +54,18 @@ public class Chat extends JFrame implements ActionListener{
 	  // vector of initial values sent to server, contains:
 	  // client name, public and private keys, server address and port
 	  
-	
-	private Chat() {
 
-	    // Default Constructor only exists to defeat instantiation.
+	  private JTextField clientKey;
+	  private MessageBox mb;
+	  
+	  private Client client = null;
+
+	
+	private Chat() 
+	{
+
 		connected = false;
+
 		JPanel container = new JPanel();
 		container.setLayout(new GridLayout(1,2));
 		JPanel left = new JPanel();
@@ -65,9 +76,11 @@ public class Chat extends JFrame implements ActionListener{
 		JLabel createName = new JLabel(" Your Name");
 		clientName = new JTextField();
 		connectButton = new JButton("Join Chat");
+
 		connectButton.setEnabled(false); //set enabled until user inputs all data
 		leaveChat = new JButton("Leave Chat");
 		leaveChat.setEnabled(false); 
+
 		serverAddressPrompt = new JLabel(" Server Address");
 		serverPortPrompt = new JLabel(" Server Port");
 		addressInfo = new JTextField();
@@ -77,24 +90,26 @@ public class Chat extends JFrame implements ActionListener{
 		connectionPanel.add(createName);
 		connectionPanel.add(clientName);
 		connectionPanel.add(connectButton);
+		connectButton.addActionListener(new JoinChatEventHandler(this));
 		connectionPanel.add(leaveChat);	
+		leaveChat.setEnabled(false);
 		connectionPanel.add(serverAddressPrompt);
 		connectionPanel.add(addressInfo);
 		connectionPanel.add(serverPortPrompt);
-		connectionPanel.add(portInfo);	
+		connectionPanel.add(portInfo);
 		connectionPanel.setBackground(new Color(204, 255, 245));
 		
 		left.add(connectionPanel, BorderLayout.NORTH);
 		
-		MessageBox mb = new MessageBox(); // message history
+		mb = new MessageBox(); // message history
 		left.add(mb, BorderLayout.CENTER);
 		
 		JPanel messagePart = new JPanel();
 		message = new JTextField(25);
 		message.setEnabled (false);
-		message.addActionListener( this );
+		//message.addActionListener( this );
 		sendButton = new JButton("Send");
-		sendButton.addActionListener( this );
+		sendButton.addActionListener( new SendMessageHandler(this) );
 		sendButton.setEnabled (false); // keep enabled until connected to server
 		
 		messagePart.add(message);
@@ -114,9 +129,12 @@ public class Chat extends JFrame implements ActionListener{
 		this.setTitle("Networked Chat with RSA");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
+
 		initiateOption(); // get prime numbers generated based on user"s choice
 		getConnectionInfo(); // get port and IP address from user input
 	   }
+	}
+
 
 	public JTextField getIPaddress()
 	{
@@ -128,6 +146,7 @@ public class Chat extends JFrame implements ActionListener{
 		return portInfo;
 	}
 	
+
 	public JTextField getNameInfo()
 	{
 		return clientName;
@@ -211,9 +230,59 @@ public class Chat extends JFrame implements ActionListener{
 	           ex.printStackTrace();
 	       }
 	   }
+
+	// setter
+	public void allowAccess(Client cl)
+	{
+		client = cl;
+		message.setEnabled(true);
+		sendButton.setEnabled(true);
+		connectButton.setEnabled(false);
+		leaveChat.setEnabled(true);
+	}
 	
-	void initiateOption() {
+	// setter
+	public void appendMessage(String msg)
+	{
+		mb.addMessage(msg);
+	}
+	
+	// getter
+	public String getPortInfo()
+	{
+		return portInfo.getText();
+	}
+	
+	// getter
+	public String getIPInfo()
+	{
+		return addressInfo.getText();
+	}
+	
+	// getter
+	public String getMessage()
+	{
+		return message.getText();
+	}
+	
+	// getter
+	public Client getClientSocket()
+	{
+		return client;
+	}
+	
+	public static Chat getChatContainer() 
+	{
+		if(CONTAINER == null)
+		{
+			CONTAINER = new Chat();
+		}
 		
+	    return CONTAINER;
+	}
+	
+	void initiateOption() 
+	{
 		int choice;
 		//String fileName;
 		int secondChoice;
@@ -256,7 +325,8 @@ public class Chat extends JFrame implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent arg0)
+	{
 		// TODO Auto-generated method stub
 		
 	}
