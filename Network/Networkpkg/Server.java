@@ -56,7 +56,6 @@ public class Server
 				{
 					new communicationThread(server.accept());
 					//add client info to the clientList vector;
-					
 				}
 				catch(IOException e) 
 				{

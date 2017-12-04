@@ -34,8 +34,6 @@ public class RSA
 	// validity check for caller of the object
 	private boolean validPrimes = false;
 	
-	//encryption and decryption blocks
-	Vector <BigInteger> block = new Vector<BigInteger>();
 	
 	//constructor
 	// @Param p - passed in to compute rsa algorithm, must be prime
@@ -44,9 +42,16 @@ public class RSA
 	{
 		this.q = q;
 		this.p = p;
-		
+			
 		n = p.multiply(q);
+		MillerRabinTest primeTest = new MillerRabinTest(p, q);
 		
+		// test numbers to check if greater than 128^4 and if both are prime
+		if((n.compareTo(BigInteger.valueOf((128 << 4))) > 0) && primeTest.isPrime())
+			validPrimes = true;
+		else
+			validPrimes = false;
+			
 		// m = (p - 1) * (q- 1)
 		m = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
 		
@@ -103,22 +108,29 @@ public class RSA
 		return potentialD;
 	}
 	
+	// encrypts a String that the caller intends to send over the network in order to 
+	// avoid other users from intercepting the message and reading it
+	// @Param msg - the string message that the caller intends to send
+	// @Return Vector<BigInteger> - the String encoded into several blocks inside a vector is returned
 	public Vector<BigInteger> encryptM(String msg)
 	{	
-		// initialize variables for 
+		// initialize variables for computing the blocking algorithm
 		int asciiVer[] = new int[msg.length()];
+		Vector <BigInteger> block = new Vector<BigInteger>();
 		BigInteger total = BigInteger.ZERO;
 		int i = 0;
 		
+		// convert each character into the ascii value representation
 		for(i = 0; i < msg.length(); i++)
 			asciiVer[i] = (int) msg.charAt(i);
 		
-		
+		// compute the blocking algorithm for the whole message where each block will contain at most 4 characters
 		for(i = 0; i < asciiVer.length; i++)
 		{
+			// char*128^i
 			BigInteger calculation = ( BigInteger.valueOf(asciiVer[i]) ).multiply( ( BigInteger.valueOf(128) ).pow(i % 4) );
 			
-			
+			// every four characters reset variables to keep each block at 4 characters
 			if( (i != 0) && (i % 4 == 0) )
 			{
 				block.add(total);
@@ -129,26 +141,65 @@ public class RSA
 			{
 				total = total.add(calculation);
 			}
-
 		}
 		
+		// add any stray values that were left behind
 		if(i-1 % 4 != 0)
 			block.add(total);
 		
+		// encode each block with the rsa algorithm using the public key
 		for(int j = 0; j < block.size(); j++)
 		{
 			 BigInteger b = block.elementAt(j);
 			 BigInteger encodedBlock = b.modPow(e, n);
 			 block.set(j, encodedBlock);
 		}
-//		System.out.println(block.size());
-//		
-//		for(i = 0; i < block.size(); i++)
-//			System.out.println(block.elementAt(i));
 			
 		return block;
 	}
 	
+	// method that decrypts multiple blocks and converts them to string that is then sent
+	// back to the caller
+	// @Param encryptedBlock - the vector block that contains a message that is encrypted with a public key
+	// @Return String - the message that was decoded from the vector block passed in as a parameter
+	public String decryptM(Vector<BigInteger> encryptedBlock)
+	{
+		String decryptedMessage = "";
+		
+		// initialize values that will be used for bit masking to get characters back
+		BigInteger sevenBits = BigInteger.valueOf(0x7F);
+		
+		// decode the blocks
+		for(int i = 0; i < encryptedBlock.size(); i++)
+		{
+			BigInteger b = encryptedBlock.elementAt(i);
+			BigInteger db = b.modPow(d, n);
+			encryptedBlock.set(i, db);
+		}
+		
+		// undo the blocking algorithm done by encryption method and extract the characters
+		for(int i = 0; i < encryptedBlock.size(); i++)
+		{
+			String fourChars = "";
+			BigInteger chosenBlock = encryptedBlock.elementAt(i);
+			
+			// iterate 4 times because thats how many chars are in each block
+			for(int j = 0; j < 4; j++)
+			{
+				BigInteger shiftedBits = sevenBits.shiftLeft(j*7);
+				BigInteger savedBits = chosenBlock.and(shiftedBits);
+				
+				savedBits = savedBits.shiftRight(j*7);
+				int extractedInt = savedBits.intValue();
+				fourChars = fourChars + (char) extractedInt;
+			}
+			
+			decryptedMessage = decryptedMessage.concat(fourChars);
+		}
+		
+		//System.out.println(decryptedMessage);
+		return decryptedMessage;
+	}
 	
 	// returns public key as an integer array of size 2
 	public BigInteger[] getPubKey()
@@ -161,7 +212,7 @@ public class RSA
 	// returns false if values passed failed the primality test
 	public boolean isInputValid()
 	{
-		return false;
+		return validPrimes;
 	}
 	
 	
