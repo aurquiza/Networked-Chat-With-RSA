@@ -39,14 +39,6 @@ public class Chat extends JFrame implements ActionListener{
 	  private JTextField clientName;
 	  //private JLabel status;
 
-	  // Network Items
-	  private boolean running;
-	  private boolean connected;
-	  private boolean serverContinue;
-	  private ServerSocket serverSocket;
-	  private Socket commSocket;
-	  private PrintWriter out;
-	  private BufferedReader in;
 	  
 	  static BigInteger firstPrime;
 	  static BigInteger secondPrime;
@@ -63,9 +55,6 @@ public class Chat extends JFrame implements ActionListener{
 	
 	private Chat() 
 	{
-
-		connected = false;
-
 		JPanel container = new JPanel();
 		container.setLayout(new GridLayout(1,2));
 		JPanel left = new JPanel();
@@ -230,12 +219,13 @@ public class Chat extends JFrame implements ActionListener{
 		sendButton.setEnabled(true);
 		connectButton.setEnabled(false);
 		leaveChat.setEnabled(true);
+		MessageBox.addMessage("You can send and receive messages now\n");
 	}
 	
 	// setter
 	public void appendMessage(String msg)
 	{
-		mb.addMessage(msg);
+		MessageBox.addMessage(msg);
 	}
 	
 	// getter
@@ -303,7 +293,7 @@ public class Chat extends JFrame implements ActionListener{
 		        }
 	        }
 	        else {
-	        	readPrimes("Resource\\primeNumbers.rsc");
+	        	readPrimes("Resource//primeNumbers.rsc");
 	        }
 	}
 	
