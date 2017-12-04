@@ -42,9 +42,16 @@ public class RSA
 	{
 		this.q = q;
 		this.p = p;
-		
+			
 		n = p.multiply(q);
+		MillerRabinTest primeTest = new MillerRabinTest(p, q);
 		
+		// test numbers to check if greater than 128^4 and if both are prime
+		if((n.compareTo(BigInteger.valueOf((128 << 4))) > 0) && primeTest.isPrime())
+			validPrimes = true;
+		else
+			validPrimes = false;
+			
 		// m = (p - 1) * (q- 1)
 		m = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
 		
@@ -101,23 +108,29 @@ public class RSA
 		return potentialD;
 	}
 	
+	// encrypts a String that the caller intends to send over the network in order to 
+	// avoid other users from intercepting the message and reading it
+	// @Param msg - the string message that the caller intends to send
+	// @Return Vector<BigInteger> - the String encoded into several blocks inside a vector is returned
 	public Vector<BigInteger> encryptM(String msg)
 	{	
-		// initialize variables for 
+		// initialize variables for computing the blocking algorithm
 		int asciiVer[] = new int[msg.length()];
 		Vector <BigInteger> block = new Vector<BigInteger>();
 		BigInteger total = BigInteger.ZERO;
 		int i = 0;
 		
+		// convert each character into the ascii value representation
 		for(i = 0; i < msg.length(); i++)
 			asciiVer[i] = (int) msg.charAt(i);
 		
-		
+		// compute the blocking algorithm for the whole message where each block will contain at most 4 characters
 		for(i = 0; i < asciiVer.length; i++)
 		{
+			// char*128^i
 			BigInteger calculation = ( BigInteger.valueOf(asciiVer[i]) ).multiply( ( BigInteger.valueOf(128) ).pow(i % 4) );
 			
-			
+			// every four characters reset variables to keep each block at 4 characters
 			if( (i != 0) && (i % 4 == 0) )
 			{
 				block.add(total);
@@ -130,29 +143,27 @@ public class RSA
 			}
 		}
 		
+		// add any stray values that were left behind
 		if(i-1 % 4 != 0)
 			block.add(total);
 		
-//		System.out.println("Inside encode method");
-//		for(i = 0; i < block.size(); i++)
-//			System.out.println(block.elementAt(i));
-		
+		// encode each block with the rsa algorithm using the public key
 		for(int j = 0; j < block.size(); j++)
 		{
 			 BigInteger b = block.elementAt(j);
 			 BigInteger encodedBlock = b.modPow(e, n);
 			 block.set(j, encodedBlock);
 		}
-
-//		for(i = 0; i < block.size(); i++)
-//			System.out.println(block.elementAt(i));
 			
 		return block;
 	}
 	
+	// method that decrypts multiple blocks and converts them to string that is then sent
+	// back to the caller
+	// @Param encryptedBlock - the vector block that contains a message that is encrypted with a public key
+	// @Return String - the message that was decoded from the vector block passed in as a parameter
 	public String decryptM(Vector<BigInteger> encryptedBlock)
 	{
-//		System.out.println("Inside decode method");
 		String decryptedMessage = "";
 		
 		// initialize values that will be used for bit masking to get characters back
@@ -201,7 +212,7 @@ public class RSA
 	// returns false if values passed failed the primality test
 	public boolean isInputValid()
 	{
-		return false;
+		return validPrimes;
 	}
 	
 	

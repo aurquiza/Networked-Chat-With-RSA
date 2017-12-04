@@ -17,9 +17,12 @@ public class Session
     
 		System.out.println("Testing standard out");
 		RSA sec = new RSA(Chat.getFirstPrime(), Chat.getSecondPrime()); 
-		block = sec.encryptM(msg);
-		String newM = sec.decryptM(block);
-		System.out.println(newM);
+		boolean valid = sec.isInputValid();
+		System.out.println("are the primes passed in valid?: " + valid);
+		
+//		block = sec.encryptM(msg);
+//		String newM = sec.decryptM(block);
+//		System.out.println(newM);
 		
 		System.out.println("First: " + Chat.getFirstPrime() + " Second: " + Chat.getSecondPrime());
 
