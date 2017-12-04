@@ -32,6 +32,21 @@ public class Server
 			System.out.println("There is an error with the server");
 		}
 	}
+	
+	public void updateUsers(NameAndKeyPair newClient)
+	{
+		for(clientInfo currentClient : clientList)
+		{
+			ObjectOutputStream clientOut = currentClient.getOBOS();
+			
+			try {
+				clientOut.writeObject(newClient);
+			} catch (IOException e) {
+
+				System.err.println("sending new client info failed :c");
+			}
+		}
+	}
 
 	public static void main(String[] args)
 	{
@@ -86,6 +101,11 @@ public class Server
 				ObjectInputStream in = new ObjectInputStream(connection.getInputStream());
 				
 				String clientInput;
+				NameAndKeyPair clientInformation;
+				clientInformation = (NameAndKeyPair) in.readObject();
+				clientList.addElement(new clientInfo(out, clientInformation));
+				updateUsers(clientInformation);
+				
 				while(b)
 				{
 					clientInput = (String) in.readObject();

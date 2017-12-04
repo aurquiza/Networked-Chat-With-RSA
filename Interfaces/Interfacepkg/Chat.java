@@ -26,7 +26,6 @@ public class Chat extends JFrame implements ActionListener{
 	private static Chat CONTAINER = null;
 	  // GUI items
 	  private JButton sendButton; // send message
-	  //private JButton serverButton;
 	  private JButton connectButton; // join chat
 	  private JButton leaveChat; // leave chat
 
@@ -37,23 +36,12 @@ public class Chat extends JFrame implements ActionListener{
 	  private JTextField message;
 
 	  private JTextField clientName;
-	  //private JLabel status;
-
-	  // Network Items
-	  private boolean running;
-	  private boolean connected;
-	  private boolean serverContinue;
-	  private ServerSocket serverSocket;
-	  private Socket commSocket;
-	  private PrintWriter out;
-	  private BufferedReader in;
 	  
 	  static BigInteger firstPrime;
 	  static BigInteger secondPrime;
 	  
 	  // vector of initial values sent to server, contains:
 	  // client name, public and private keys, server address and port
-	  
 
 	  private JTextField clientKey;
 	  private MessageBox mb;
@@ -63,9 +51,6 @@ public class Chat extends JFrame implements ActionListener{
 	
 	private Chat() 
 	{
-
-		connected = false;
-
 		JPanel container = new JPanel();
 		container.setLayout(new GridLayout(1,2));
 		JPanel left = new JPanel();
@@ -238,19 +223,19 @@ public class Chat extends JFrame implements ActionListener{
 		mb.addMessage(msg);
 	}
 	
-	// getter
+	// getter for portInfo based on user input
 	public String getPortInfo()
 	{
 		return portInfo.getText();
 	}
 	
-	// getter
+	// getter ip address based on user input
 	public String getIPInfo()
 	{
 		return addressInfo.getText();
 	}
 	
-	// getter
+	// getter for the message the user input
 	public String getMessage()
 	{
 		return message.getText();
