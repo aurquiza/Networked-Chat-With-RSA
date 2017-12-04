@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 public class Client extends JFrame
 {
-	//private JLabel connect;
+	
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private String message = "";
@@ -67,6 +67,9 @@ public class Client extends JFrame
 				System.out.println("Inside Client: " + port + " " + host);
 				connection = new Socket(host, Integer.parseInt(port));
 				isConnected = true;
+				
+				// send object which has user's information
+				
 			}
 			catch (NumberFormatException e)
 			{
@@ -129,7 +132,14 @@ private class whileChatting implements Runnable
 		do{
 			try
 			{
-				message = (String) input.readObject();
+				Object o = input.readObject();
+				
+				if(o instanceof NameAndKeyPair)
+				{
+					System.out.println("recieved new client info!");
+				}
+				else
+					message = (String) o;
 			}
 			catch(ClassNotFoundException classNotFoundException)
 			{
