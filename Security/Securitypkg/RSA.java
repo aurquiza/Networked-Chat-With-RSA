@@ -34,8 +34,6 @@ public class RSA
 	// validity check for caller of the object
 	private boolean validPrimes = false;
 	
-	//encryption and decryption blocks
-	Vector <BigInteger> block = new Vector<BigInteger>();
 	
 	//constructor
 	// @Param p - passed in to compute rsa algorithm, must be prime
@@ -107,6 +105,7 @@ public class RSA
 	{	
 		// initialize variables for 
 		int asciiVer[] = new int[msg.length()];
+		Vector <BigInteger> block = new Vector<BigInteger>();
 		BigInteger total = BigInteger.ZERO;
 		int i = 0;
 		
@@ -129,11 +128,14 @@ public class RSA
 			{
 				total = total.add(calculation);
 			}
-
 		}
 		
 		if(i-1 % 4 != 0)
 			block.add(total);
+		
+//		System.out.println("Inside encode method");
+//		for(i = 0; i < block.size(); i++)
+//			System.out.println(block.elementAt(i));
 		
 		for(int j = 0; j < block.size(); j++)
 		{
@@ -141,14 +143,52 @@ public class RSA
 			 BigInteger encodedBlock = b.modPow(e, n);
 			 block.set(j, encodedBlock);
 		}
-//		System.out.println(block.size());
-//		
+
 //		for(i = 0; i < block.size(); i++)
 //			System.out.println(block.elementAt(i));
 			
 		return block;
 	}
 	
+	public String decryptM(Vector<BigInteger> encryptedBlock)
+	{
+//		System.out.println("Inside decode method");
+		String decryptedMessage = "";
+		
+		// initialize values that will be used for bit masking to get characters back
+		BigInteger sevenBits = BigInteger.valueOf(0x7F);
+		
+		// decode the blocks
+		for(int i = 0; i < encryptedBlock.size(); i++)
+		{
+			BigInteger b = encryptedBlock.elementAt(i);
+			BigInteger db = b.modPow(d, n);
+			encryptedBlock.set(i, db);
+		}
+		
+		// undo the blocking algorithm done by encryption method and extract the characters
+		for(int i = 0; i < encryptedBlock.size(); i++)
+		{
+			String fourChars = "";
+			BigInteger chosenBlock = encryptedBlock.elementAt(i);
+			
+			// iterate 4 times because thats how many chars are in each block
+			for(int j = 0; j < 4; j++)
+			{
+				BigInteger shiftedBits = sevenBits.shiftLeft(j*7);
+				BigInteger savedBits = chosenBlock.and(shiftedBits);
+				
+				savedBits = savedBits.shiftRight(j*7);
+				int extractedInt = savedBits.intValue();
+				fourChars = fourChars + (char) extractedInt;
+			}
+			
+			decryptedMessage = decryptedMessage.concat(fourChars);
+		}
+		
+		//System.out.println(decryptedMessage);
+		return decryptedMessage;
+	}
 	
 	// returns public key as an integer array of size 2
 	public BigInteger[] getPubKey()
