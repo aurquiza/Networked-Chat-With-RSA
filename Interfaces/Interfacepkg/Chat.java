@@ -132,7 +132,6 @@ public class Chat extends JFrame implements ActionListener{
 
 		initiateOption(); // get prime numbers generated based on user"s choice
 		getConnectionInfo(); // get port and IP address from user input
-	   }
 	}
 
 
@@ -151,15 +150,7 @@ public class Chat extends JFrame implements ActionListener{
 	{
 		return clientName;
 	}
-	
-	public static Chat getChatContainer() {
 
-	      if(CONTAINER == null) {
-	         CONTAINER = new Chat();
-	      }
-
-	      return CONTAINER;
-	   }
 	// first and second prime numbers
 	// are generated from file or from user input
 	public static BigInteger getFirstPrime()
@@ -229,7 +220,7 @@ public class Chat extends JFrame implements ActionListener{
 	           // Or we could just do this: 
 	           ex.printStackTrace();
 	       }
-	   }
+	}
 
 	// setter
 	public void allowAccess(Client cl)
@@ -323,6 +314,7 @@ public class Chat extends JFrame implements ActionListener{
 		connectButton.setEnabled(true);
 		leaveChat.setEnabled(true);
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0)
