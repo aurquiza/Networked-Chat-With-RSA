@@ -23,7 +23,7 @@ public class Server
 	{
 		try
 		{
-			server = new ServerSocket(1998); 
+			server = new ServerSocket(2002); 
 			
 			//Trying to connect and have conversation
 			 new waitForConnection();
@@ -47,7 +47,18 @@ public class Server
 			}
 		}
 	}
-
+	
+	public void printUsers() {
+		
+		for(clientInfo client : clientList) {
+			NameAndKeyPair temp = client.getNameNKey();
+			System.out.println("Client name: " +temp.getName());
+		}
+		
+		
+	}
+	
+	
 	public static void main(String[] args)
 	{
 		Server serverTest = new Server();
@@ -70,7 +81,7 @@ public class Server
 				try 
 				{
 					new communicationThread(server.accept());
-					//add client info to the clientList vector;
+					//printUsers();
 				}
 				catch(IOException e) 
 				{
@@ -79,6 +90,8 @@ public class Server
 			}
 		}
 	}
+	
+	
 	
 	private class communicationThread implements Runnable
 	{
@@ -102,10 +115,15 @@ public class Server
 				
 				String clientInput;
 				NameAndKeyPair clientInformation;
+				
+				//whenever a client is added to the server we send it to the actual server
 				clientInformation = (NameAndKeyPair) in.readObject();
+				System.out.println("Name :" + clientInformation.getName());
+				//System.out.println("Key :" + clientInformation.getPubKey());
+				
 				clientList.addElement(new clientInfo(out, clientInformation));
 				updateUsers(clientInformation);
-				
+				//printUsers();
 				while(b)
 				{
 					clientInput = (String) in.readObject();
@@ -119,7 +137,7 @@ public class Server
 			} 
 			catch (IOException | ClassNotFoundException e)
 			{
-				// TODO Auto-generated catch block
+				
 				System.out.println("Theres an error with the communication thread");
 			}
 

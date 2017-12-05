@@ -1,9 +1,11 @@
 package Networkpkg;
 
+
+import java.io.*;
 import java.math.BigInteger;
 import java.util.Vector;
 
-public class NameAndKeyPair 
+public class NameAndKeyPair implements Serializable
 {
 	private Vector<BigInteger> publicKey;
 	private String name;

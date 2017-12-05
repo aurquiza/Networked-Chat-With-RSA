@@ -20,5 +20,11 @@ public class clientInfo
 	public ObjectOutputStream getOBOS() {
 		return outputClient;
 	}
+	
+	public NameAndKeyPair getNameNKey() {
+		return nameAndKey;
+	}
+	
+	
 
 }	

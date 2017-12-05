@@ -5,6 +5,7 @@
  */
 
 package Interfacepkg;
+import Securitypkg.RSA;
 import Controllerpkg.*;
 import Networkpkg.Client;
 
@@ -47,7 +48,7 @@ public class Chat extends JFrame implements ActionListener{
 	  private MessageBox mb;
 	  
 	  private Client client = null;
-
+	  RSA mainRSA;
 	
 	private Chat() 
 	{
@@ -136,6 +137,9 @@ public class Chat extends JFrame implements ActionListener{
 		return clientName;
 	}
 
+	public String getActualName() {
+		return clientName.getText();
+	}
 	// first and second prime numbers
 	// are generated from file or from user input
 	public static BigInteger getFirstPrime()
@@ -148,6 +152,7 @@ public class Chat extends JFrame implements ActionListener{
 		return secondPrime;
 	}
 	
+
 	private void setFirstPrime(String num)
 	{
 
@@ -189,6 +194,12 @@ public class Chat extends JFrame implements ActionListener{
 	           
 	           value = rand.nextInt(counter-1);
 	           setSecondPrime(primes.get(value));
+	           
+	           // set rsa thing in here too
+	           RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+	           mainRSA = tempRSA;
+	           
+	           //if wrong, reprompt the user
 	           
 	           bufferedReader.close();
 	           fileReader.close();
@@ -233,6 +244,11 @@ public class Chat extends JFrame implements ActionListener{
 	public String getIPInfo()
 	{
 		return addressInfo.getText();
+	}
+	
+	
+	public RSA getRSA() {
+		return mainRSA;
 	}
 	
 	// getter for the message the user input
@@ -285,10 +301,15 @@ public class Chat extends JFrame implements ActionListener{
 		        {
 		        	setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
 		        	setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
+		        	//make rsa thing here
+		        RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+			    mainRSA = tempRSA;
+			    //if wrong reprompt the user
+			           
 		        }
 	        }
 	        else {
-	        	readPrimes("Resource\\primeNumbers.rsc");
+	        	readPrimes("Resource//primeNumbers.rsc");
 	        }
 	}
 	

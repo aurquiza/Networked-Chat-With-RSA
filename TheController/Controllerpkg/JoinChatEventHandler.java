@@ -17,7 +17,7 @@ public class JoinChatEventHandler implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
 		
-		Client c = new Client(ref.getIPInfo(), ref.getPortInfo());
+		Client c = new Client(ref.getIPInfo(), ref.getPortInfo(), ref);
 		if(c.checkConnectionStatus())
 		{
 			System.out.println("Conenction established :D");

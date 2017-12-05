@@ -1,4 +1,6 @@
 package Networkpkg;
+import Interfacepkg.Chat;
+import Securitypkg.*;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
@@ -16,13 +18,15 @@ public class Client extends JFrame
 	
 	private Socket connection;
 	private boolean isConnected = false;
-
+	private Chat gui;
 	
 		//constructor
-		public Client(String host, String port)
+		public Client(String host, String port, Chat gui)
 		{
 			this.host = host;
 			this.port = port;
+			this.gui = gui;
+			
 			startRunning();
 		}
 		
@@ -46,6 +50,15 @@ public class Client extends JFrame
 				}
 				
 				setupStreams();
+				
+				// send object which has user's information
+				RSA clientRSA = gui.getRSA();
+				String clientName = gui.getActualName();
+				NameAndKeyPair clientNameNKey = new NameAndKeyPair(clientRSA.getPubKey(), clientName);
+				
+				output.writeObject(clientNameNKey);
+				output.flush();
+				
 				new whileChatting();
 			}
 			catch(EOFException eofException)
@@ -68,7 +81,7 @@ public class Client extends JFrame
 				connection = new Socket(host, Integer.parseInt(port));
 				isConnected = true;
 				
-				// send object which has user's information
+
 				
 			}
 			catch (NumberFormatException e)
