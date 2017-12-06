@@ -1,4 +1,6 @@
 package Networkpkg;
+import Interfacepkg.Chat;
+import Securitypkg.*;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
@@ -6,7 +8,7 @@ import java.awt.event.*;
 import javax.swing.*;
 public class Client extends JFrame
 {
-	//private JLabel connect;
+	
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private String message = "";
@@ -16,13 +18,15 @@ public class Client extends JFrame
 	
 	private Socket connection;
 	private boolean isConnected = false;
-
+	private Chat gui;
 	
 		//constructor
-		public Client(String host, String port)
+		public Client(String host, String port, Chat gui)
 		{
 			this.host = host;
 			this.port = port;
+			this.gui = gui;
+			
 			startRunning();
 		}
 		
@@ -46,6 +50,15 @@ public class Client extends JFrame
 				}
 				
 				setupStreams();
+				
+				// send object which has user's information
+				RSA clientRSA = gui.getRSA();
+				String clientName = gui.getActualName();
+				NameAndKeyPair clientNameNKey = new NameAndKeyPair(clientRSA.getPubKey(), clientName);
+				
+				output.writeObject(clientNameNKey);
+				output.flush();
+				
 				new whileChatting();
 			}
 			catch(EOFException eofException)
@@ -67,6 +80,9 @@ public class Client extends JFrame
 				System.out.println("Inside Client: " + port + " " + host);
 				connection = new Socket(host, Integer.parseInt(port));
 				isConnected = true;
+				
+
+				
 			}
 			catch (NumberFormatException e)
 			{
@@ -122,14 +138,22 @@ private class whileChatting implements Runnable
 	{
 		new Thread(this).start();
 	}
-	
+
 	public void run() 
 	{
 		
 		do{
 			try
 			{
-				message = (String) input.readObject();
+				Object o = input.readObject();
+				
+				if(o instanceof NameAndKeyPair)
+				{
+					NameAndKeyPair sentData = (NameAndKeyPair)o;
+					gui.updateClientList(sentData);
+				}
+				else
+					message = (String) o;
 			}
 			catch(ClassNotFoundException classNotFoundException)
 			{

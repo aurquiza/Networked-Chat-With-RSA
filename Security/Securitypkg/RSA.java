@@ -202,9 +202,11 @@ public class RSA
 	}
 	
 	// returns public key as an integer array of size 2
-	public BigInteger[] getPubKey()
+	public Vector<BigInteger> getPubKey()
 	{
-		BigInteger publicKey[] = new BigInteger[]{pubKey.getN(),pubKey.getE()};
+		Vector<BigInteger> publicKey = new Vector<BigInteger>();
+		publicKey.add(pubKey.getN());
+		publicKey.add(pubKey.getE());
 		return publicKey;
 	}
 	

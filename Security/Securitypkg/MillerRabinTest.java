@@ -25,6 +25,7 @@ class MillerRabinTest
 		passedTest = (isProbablePrime(prime1, 5) && isProbablePrime(prime2, 5));
 	}
 	
+	// getter method that determines if numbers passed to constructor were valid prime numbers
 	public boolean isPrime()
 	{
 		return passedTest;
