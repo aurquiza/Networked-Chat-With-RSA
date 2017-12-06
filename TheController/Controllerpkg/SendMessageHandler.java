@@ -22,8 +22,7 @@ public class SendMessageHandler implements ActionListener
 		client = ref.getClientSocket();
 		
 		// not fully implemented. yet.
-		List<String> recievers = ref.getClientsToSendMsg();
-		//RSA 
+		List<String> recievers = ref.getClientsToSendMsg(); 
 		
 		
 		ref.appendMessage(ref.getMessage());

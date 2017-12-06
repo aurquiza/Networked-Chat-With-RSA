@@ -129,6 +129,7 @@ public class Chat extends JFrame implements ActionListener{
 	{
 		ClientList boxRef = ClientList.getClientBox();
 		List<String> chosenNames =  boxRef.getChosenClients();
+		RSA userKeys;
 		if(chosenNames.isEmpty())
 		{
 			System.err.println("Click on people to send message to!");
