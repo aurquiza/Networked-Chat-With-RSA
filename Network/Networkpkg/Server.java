@@ -45,6 +45,8 @@ public class Server extends JFrame
 		container.add(IPLabel);
 		container.add(portLabel);
 		container.add(new JScrollPane(history));
+		
+		
 		setSize(500, 250);
 		setVisible(true);
 		
@@ -78,6 +80,7 @@ public class Server extends JFrame
 			
 			try {
 				clientOut.writeObject(newClient);
+				history.insert(currentClient.getNameNKey().getName() + " joined the server\n", 0);
 			} catch (IOException e) {
 
 				System.err.println("sending new client info failed :c");
@@ -99,6 +102,7 @@ public class Server extends JFrame
 			ObjectOutputStream out = clientInf.getOBOS();
 			try {
 				out.writeObject(deletePair);
+				//history.insert(clientInf.getNameNKey().getName() + " left the server\n", 0);
 				out.flush();
 			} catch (IOException e) {
 				System.out.println("error sending delete client info");
