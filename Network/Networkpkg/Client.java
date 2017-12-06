@@ -101,7 +101,7 @@ public class Client extends JFrame
 		}
 
 		//Close connection
-		private void closeConnection()
+		public void closeConnection()
 		{
 			try
 			{

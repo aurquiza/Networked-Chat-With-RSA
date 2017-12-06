@@ -85,6 +85,7 @@ public class Chat extends JFrame implements ActionListener{
 		connectButton.addActionListener(new JoinChatEventHandler(this));
 		connectionPanel.add(leaveChat);	
 		leaveChat.setEnabled(false);
+		leaveChat.addActionListener(new LeaveChatEventHandler(this));
 		connectionPanel.add(serverAddressPrompt);
 		connectionPanel.add(addressInfo);
 		connectionPanel.add(serverPortPrompt);
@@ -260,12 +261,13 @@ public class Chat extends JFrame implements ActionListener{
 		sendButton.setEnabled(true);
 		connectButton.setEnabled(false);
 		leaveChat.setEnabled(true);
+		MessageBox.addMessage("You can send and receive messages now\n");
 	}
 	
 	// setter
 	public void appendMessage(String msg)
 	{
-		mb.addMessage(msg);
+		MessageBox.addMessage(msg);
 	}
 	
 	// getter for portInfo based on user input
@@ -357,7 +359,12 @@ public class Chat extends JFrame implements ActionListener{
 		leaveChat.setEnabled(true);
 	}
 	
-
+	public void callCloseConnection()
+	{
+		connectButton.setEnabled(true);
+		leaveChat.setEnabled(false);
+		client.closeConnection();
+	}
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{

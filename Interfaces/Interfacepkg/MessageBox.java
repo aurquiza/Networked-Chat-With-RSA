@@ -8,7 +8,7 @@ import javax.swing.JTextArea;
 public class MessageBox extends JPanel
 {
 
-	JTextArea messageHistory;
+	static JTextArea messageHistory;
 	
 	public MessageBox()
 	{
@@ -17,7 +17,7 @@ public class MessageBox extends JPanel
 		this.add(new JScrollPane(messageHistory));
 	}
 	
-	public void addMessage(String msg)
+	public static void addMessage(String msg)
 	{
 		messageHistory.append(msg + "\n");
 	}
