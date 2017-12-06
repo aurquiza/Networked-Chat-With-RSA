@@ -8,22 +8,57 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-public class Server
+public class Server extends JFrame
 {
 	private ServerSocket server;
 	private Vector<clientInfo> clientList  = new Vector<clientInfo>();
-	
+	private JTextArea history;
+	private JLabel IPLabel;
+	private JLabel portLabel;
+	private String host = null;
+	private int port = 0;
 	//constructor
-	public Server()
+	public Server() 
 	{
+		
 		startRunning();
+		Container container  = getContentPane();
+		container.setLayout(new FlowLayout());
+		
+		IPLabel = new JLabel();
+		portLabel = new JLabel();
+		
+		try {
+			host = InetAddress.getLocalHost().getHostAddress();
+			port = server.getLocalPort();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("There was an error with getting the IP address or getting the port...");
+		}
+		
+		IPLabel.setText("Connect to: " + host);
+		portLabel.setText("with Port: " + Integer.toString(port));
+		
+		history  = new JTextArea(10,40);
+		history.setEditable(false);
+		
+		container.add(IPLabel);
+		container.add(portLabel);
+		container.add(new JScrollPane(history));
+		setSize(500, 250);
+		setVisible(true);
+		
+		
+		
+		
+		
 	}
 	
 	public void startRunning()
 	{
 		try
 		{
-			server = new ServerSocket(2002); 
+			server = new ServerSocket(0); 
 			
 			//Trying to connect and have conversation
 			 new waitForConnection();
