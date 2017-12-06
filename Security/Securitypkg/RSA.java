@@ -112,8 +112,10 @@ public class RSA
 	// avoid other users from intercepting the message and reading it
 	// @Param msg - the string message that the caller intends to send
 	// @Return Vector<BigInteger> - the String encoded into several blocks inside a vector is returned
-	public Vector<BigInteger> encryptM(String msg)
+	public Vector<BigInteger> encryptM(String msg, PublicKey recieverKey)
 	{	
+		BigInteger recieverE = recieverKey.getE();
+		BigInteger recieverN = recieverKey.getN();
 		// initialize variables for computing the blocking algorithm
 		int asciiVer[] = new int[msg.length()];
 		Vector <BigInteger> block = new Vector<BigInteger>();
@@ -151,7 +153,7 @@ public class RSA
 		for(int j = 0; j < block.size(); j++)
 		{
 			 BigInteger b = block.elementAt(j);
-			 BigInteger encodedBlock = b.modPow(e, n);
+			 BigInteger encodedBlock = b.modPow(recieverE, recieverN);
 			 block.set(j, encodedBlock);
 		}
 			
