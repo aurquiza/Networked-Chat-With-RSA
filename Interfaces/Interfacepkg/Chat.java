@@ -125,15 +125,21 @@ public class Chat extends JFrame implements ActionListener{
 		getConnectionInfo(); // get port and IP address from user input
 	}
 	
-	public void getClientsToSendMsg()
+	public List<String> getClientsToSendMsg()
 	{
 		ClientList boxRef = ClientList.getClientBox();
 		List<String> chosenNames =  boxRef.getChosenClients();
-		
+		if(chosenNames.isEmpty())
+		{
+			System.err.println("Click on people to send message to!");
+			return null;
+		}
 		for(String n : chosenNames)
 		{
 			System.out.println("Sending message to: " + n);
 		}
+		
+		return chosenNames;
 	}
 	
 	public void updateClientList(NameAndKeyPair newClient)
