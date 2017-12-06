@@ -138,7 +138,7 @@ private class whileChatting implements Runnable
 	{
 		new Thread(this).start();
 	}
-	
+
 	public void run() 
 	{
 		
@@ -149,7 +149,8 @@ private class whileChatting implements Runnable
 				
 				if(o instanceof NameAndKeyPair)
 				{
-					System.out.println("recieved new client info!");
+					NameAndKeyPair sentData = (NameAndKeyPair)o;
+					gui.updateClientList(sentData);
 				}
 				else
 					message = (String) o;

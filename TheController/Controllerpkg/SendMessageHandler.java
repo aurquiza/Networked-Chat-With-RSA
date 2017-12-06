@@ -18,6 +18,11 @@ public class SendMessageHandler implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
 		client = ref.getClientSocket();
+		
+		// not fully implemented. yet.
+		ref.getClientsToSendMsg();
+		
+		
 		ref.appendMessage(ref.getMessage());
 		client.sendMessage(ref.getMessage());
 	}

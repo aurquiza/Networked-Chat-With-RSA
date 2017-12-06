@@ -8,14 +8,17 @@ package Interfacepkg;
 import Securitypkg.RSA;
 import Controllerpkg.*;
 import Networkpkg.Client;
+import Networkpkg.NameAndKeyPair;
+import Networkpkg.clientInfo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-
+import java.util.Vector;
 import java.io.*; 
 import java.awt.*;
 import java.awt.event.*;
@@ -48,7 +51,10 @@ public class Chat extends JFrame implements ActionListener{
 	  private MessageBox mb;
 	  
 	  private Client client = null;
-	  RSA mainRSA;
+	  private RSA mainRSA;
+	  
+	  // this keeps track of every client that is connected to the server
+	  private Vector<NameAndKeyPair> connectedClients = new Vector<NameAndKeyPair>();
 	
 	private Chat() 
 	{
@@ -93,7 +99,6 @@ public class Chat extends JFrame implements ActionListener{
 		JPanel messagePart = new JPanel();
 		message = new JTextField(25);
 		message.setEnabled (false);
-		//message.addActionListener( this );
 		sendButton = new JButton("Send");
 		sendButton.addActionListener( new SendMessageHandler(this) );
 		sendButton.setEnabled (false); // keep enabled until connected to server
@@ -119,7 +124,36 @@ public class Chat extends JFrame implements ActionListener{
 		initiateOption(); // get prime numbers generated based on user"s choice
 		getConnectionInfo(); // get port and IP address from user input
 	}
+	
+	public void getClientsToSendMsg()
+	{
+		ClientList boxRef = ClientList.getClientBox();
+		List<String> chosenNames =  boxRef.getChosenClients();
+		
+		for(String n : chosenNames)
+		{
+			System.out.println("Sending message to: " + n);
+		}
+	}
+	
+	public void updateClientList(NameAndKeyPair newClient)
+	{ 
+		ClientList ref = ClientList.getClientBox();
+		
+		if(newClient.getPubKey() == null)
+		{
+			connectedClients.remove(newClient);
+			ref.removeClient(newClient.getName());
+			mb.addMessage(newClient.getName() + " has left.");
+		}
+		else
+		{
+			connectedClients.addElement(newClient);
+			ref.addNewClient(newClient.getName());
+			mb.addMessage(newClient.getName() + " has joined.");
+		}
 
+	}
 
 	public JTextField getIPaddress()
 	{
@@ -140,6 +174,7 @@ public class Chat extends JFrame implements ActionListener{
 	public String getActualName() {
 		return clientName.getText();
 	}
+	
 	// first and second prime numbers
 	// are generated from file or from user input
 	public static BigInteger getFirstPrime()
@@ -152,7 +187,6 @@ public class Chat extends JFrame implements ActionListener{
 		return secondPrime;
 	}
 	
-
 	private void setFirstPrime(String num)
 	{
 
@@ -247,7 +281,8 @@ public class Chat extends JFrame implements ActionListener{
 	}
 	
 	
-	public RSA getRSA() {
+	public RSA getRSA() 
+	{
 		return mainRSA;
 	}
 	
@@ -302,8 +337,9 @@ public class Chat extends JFrame implements ActionListener{
 		        	setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
 		        	setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
 		        	//make rsa thing here
-		        RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-			    mainRSA = tempRSA;
+			        RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+				    mainRSA = tempRSA;
+			    
 			    //if wrong reprompt the user
 			           
 		        }
