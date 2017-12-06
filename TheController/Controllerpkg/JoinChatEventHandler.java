@@ -20,12 +20,12 @@ public class JoinChatEventHandler implements ActionListener
 		Client c = new Client(ref.getIPInfo(), ref.getPortInfo(), ref);
 		if(c.checkConnectionStatus())
 		{
-			System.out.println("Conenction established :D");
+			MessageBox.addMessage("Conenction established :D");
 			ref.allowAccess(c);
 		}
 		else
 		{
-			System.out.println("Connection not established :c");
+			MessageBox.addMessage("Connection not established :c");
 		}
 	}
 
