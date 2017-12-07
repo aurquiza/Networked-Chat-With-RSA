@@ -74,13 +74,14 @@ public class Server extends JFrame
 	
 	public void updateUsersOnJoin(NameAndKeyPair newClient)
 	{
+		
 		for(clientInfo currentClient : clientList)
 		{
 			ObjectOutputStream clientOut = currentClient.getOBOS();
 			
 			try {
 				clientOut.writeObject(newClient);
-				history.insert(currentClient.getNameNKey().getName() + " joined the server\n", 0);
+				//history.append(currentClient.getNameNKey().getName() + " joined the server\n");
 			} catch (IOException e) {
 
 				System.err.println("sending new client info failed :c");
@@ -102,7 +103,7 @@ public class Server extends JFrame
 			ObjectOutputStream out = clientInf.getOBOS();
 			try {
 				out.writeObject(deletePair);
-				//history.insert(clientInf.getNameNKey().getName() + " left the server\n", 0);
+				//history.append(clientInf.getNameNKey().getName() + " left the server\n");
 				out.flush();
 			} catch (IOException e) {
 				System.out.println("error sending delete client info");
@@ -205,6 +206,7 @@ public class Server extends JFrame
 				
 				// update the server's list and then update the clients' list
 				clientList.addElement(new clientInfo(out, clientInformation));
+				history.append(clientInformation.getName() + " joined the server\n");
 				updateUsersOnJoin(clientInformation);
 				sendClientList(out, clientInformation.getName());
 				
@@ -228,6 +230,7 @@ public class Server extends JFrame
 					if(clientOut.equals(out))
 					{
 						updateUsersOnLeave(clientInf);
+						history.append(clientInf.getNameNKey().getName() + " left the server\n");
 						break;
 					}
 				}
