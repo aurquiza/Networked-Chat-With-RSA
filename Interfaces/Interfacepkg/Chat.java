@@ -90,7 +90,8 @@ public class Chat extends JFrame implements ActionListener{
 			System.err.println("Name error, field is empty");
 			System.exit(0);
 		}
-		
+
+
 		clientName.setEnabled (false);
 		connectionPanel.add(createName);
 		connectionPanel.add(clientName);
