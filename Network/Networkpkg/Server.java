@@ -1,7 +1,6 @@
 package Networkpkg;
 
 import java.io.*;
-
 import java.net.*;
 
 import javax.swing.*;
@@ -12,18 +11,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is the server class and will act the mecca for all the clients to connect to and send messages to other clients
 public class Server extends JFrame
 {
-	//variables for the server
-	//the server socket
 	private ServerSocket server;
-	//the vector that will hold all the clients information
 	private Vector<clientInfo> clientList  = new Vector<clientInfo>();
-	
-	//GUI variables for the server, including which ip address and port to connect to, and the history of who joined and left
 	private JTextArea history;
 	private JLabel IPLabel;
 	private JLabel portLabel;
@@ -35,18 +26,13 @@ public class Server extends JFrame
 	public Server() 
 	{
 		
-		//start running the server
 		startRunning();
-		//setup the container
 		Container container  = getContentPane();
-		//set the layout
 		container.setLayout(new FlowLayout());
 		
-		//set up jlabels
 		IPLabel = new JLabel();
 		portLabel = new JLabel();
 		
-		//try and catch to get the ip address and a free port for the clients to connect to
 		try {
 			host = InetAddress.getLocalHost().getHostAddress();
 			port = server.getLocalPort();
@@ -55,31 +41,31 @@ public class Server extends JFrame
 			System.out.println("There was an error with getting the IP address or getting the port...");
 		}
 		
-		//display the information
 		IPLabel.setText("Connect to: " + host);
 		portLabel.setText("with Port: " + Integer.toString(port));
 		
-		//setup the history text area
 		history  = new JTextArea(10,40);
 		history.setEditable(false);
 		
-		//add objects to the container
 		container.add(IPLabel);
 		container.add(portLabel);
 		container.add(new JScrollPane(history));
 		container.setBackground(new Color(204, 255, 245));
 		
-		//set the size and visible to true
 		setSize(500, 250);
 		setVisible(true);
-	
+		
+		
+		
+		
+		
 	}
 	
-	//start running the server code
 	public void startRunning()
 	{
 		try
 		{
+
 			server = new ServerSocket(0); 
 			
 			//Trying to connect and have conversation
@@ -90,7 +76,7 @@ public class Server extends JFrame
 		}
 	}
 
-	//method to update the users as the join the server
+	
 	public void updateUsersOnJoin(NameAndKeyPair newClient)
 	{
 		
@@ -108,7 +94,6 @@ public class Server extends JFrame
 		}
 	}
 	
-	//method to update the users when they disconnect from the server
 	public void updateUsersOnLeave(clientInfo leavingClient)
 	{
 		// make dummy NameAndKey that tell other clients to delete client
@@ -132,7 +117,6 @@ public class Server extends JFrame
 		}
 	}
 	
-	//method to send the client list
 	public void sendClientList(ObjectOutputStream out, String clientName)
 	{
 		for(clientInfo cInfo : clientList)
@@ -153,7 +137,6 @@ public class Server extends JFrame
 		}
 	}
 	
-	//method to print out the clients in the clientlist
 	public void printUsers() {
 		
 		for(clientInfo client : clientList) {
@@ -171,7 +154,6 @@ public class Server extends JFrame
 	
 	}
 	
-	//class that lets the client wait for a connection to the server
 	private class waitForConnection implements Runnable
 	{
 		
@@ -199,7 +181,7 @@ public class Server extends JFrame
 	}
 	
 	
-	//class that start the communication between clients
+	
 	private class communicationThread implements Runnable
 	{
 		private Socket connection;
@@ -247,6 +229,7 @@ public class Server extends JFrame
 							sendeeOut.writeObject(clientInput);
 						}
 					}
+					//System.out.println("Client: " + clientInput);
 				}
 				
 				out.close();
@@ -266,6 +249,7 @@ public class Server extends JFrame
 						break;
 					}
 				}
+				//System.out.println("Theres an error with the communication thread");
 			}
 
 			

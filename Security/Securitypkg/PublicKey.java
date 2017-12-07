@@ -6,8 +6,7 @@
  */
 package Securitypkg;
 import java.math.BigInteger;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is the public key class for the RSA encryption
+
 public class PublicKey
 {
 	//  key, val pair for encryption
