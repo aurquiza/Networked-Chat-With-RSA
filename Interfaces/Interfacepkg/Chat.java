@@ -24,7 +24,8 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+//Eric Leon, Alexis Urquiza, Mariia Melnikova 
+//This is the chat class
 
 @SuppressWarnings("serial")
 public class Chat extends JFrame implements ActionListener{

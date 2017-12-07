@@ -5,7 +5,8 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
+//Eric Leon, Alexis Urquiza, Mariia Melnikova 
+//This is for the message box class
 @SuppressWarnings("serial")
 public class MessageBox extends JPanel
 {
