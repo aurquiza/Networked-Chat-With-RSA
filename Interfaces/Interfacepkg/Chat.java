@@ -77,7 +77,18 @@ public class Chat extends JFrame implements ActionListener{
 		serverPortPrompt = new JLabel(" Server Port");
 		addressInfo = new JTextField();
 		portInfo = new JTextField();
+		try {
 		clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
+			if(clientName.getText() == null || (clientName.getText() != null && ("".equals(clientName.getText()))))   
+				{
+			    	throw new Exception();
+				}
+		}
+		catch (Exception e)
+		{
+			System.err.println("Name error, field is empty");
+			System.exit(0);
+		}
 		clientName.setEnabled (false);
 		connectionPanel.add(createName);
 		connectionPanel.add(clientName);
@@ -152,13 +163,13 @@ public class Chat extends JFrame implements ActionListener{
 		{
 			connectedClients.remove(newClient);
 			ref.removeClient(newClient.getName());
-			mb.addMessage(newClient.getName() + " has left.");
+			MessageBox.addMessage(newClient.getName() + " has left.");
 		}
 		else
 		{
 			connectedClients.addElement(newClient);
 			ref.addNewClient(newClient.getName());
-			mb.addMessage(newClient.getName() + " has joined.");
+			MessageBox.addMessage(newClient.getName() + " has joined.");
 		}
 
 	}
@@ -268,7 +279,7 @@ public class Chat extends JFrame implements ActionListener{
 		sendButton.setEnabled(true);
 		connectButton.setEnabled(false);
 		leaveChat.setEnabled(true);
-		MessageBox.addMessage("You can send and receive messages now\n");
+		MessageBox.addMessage("You can send and receive messages now");
 	}
 	
 	// setter
