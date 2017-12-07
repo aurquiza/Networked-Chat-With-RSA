@@ -27,5 +27,6 @@ public class Session
 		System.out.println("First: " + Chat.getFirstPrime() + " Second: " + Chat.getSecondPrime());
 
 	}
+	
 
 }
