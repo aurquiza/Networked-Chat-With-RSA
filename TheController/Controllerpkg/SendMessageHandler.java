@@ -1,6 +1,8 @@
 package Controllerpkg;
 import Networkpkg.*;
 import java.awt.event.*;
+import java.util.List;
+
 import Interfacepkg.*;
 
 
@@ -20,7 +22,7 @@ public class SendMessageHandler implements ActionListener
 		client = ref.getClientSocket();
 		
 		// not fully implemented. yet.
-		ref.getClientsToSendMsg();
+		List<String> recievers = ref.getClientsToSendMsg(); 
 		
 		
 		ref.appendMessage(ref.getMessage());

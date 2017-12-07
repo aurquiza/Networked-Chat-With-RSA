@@ -65,7 +65,8 @@ public class ClientList {
 	public static JPanel getClientList()
 	{
 
-	      if(clientlist == null) {
+	      if(clientlist == null)
+	      {
 	         clientlist = new ClientList();
 	      }
 	      return clientPanel;
