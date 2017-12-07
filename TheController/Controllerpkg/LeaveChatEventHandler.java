@@ -25,4 +25,6 @@ private Chat ref;
 		ref.callCloseConnection();
 		MessageBox.addMessage("You are disconnected from chat now");
 	}
+	
+	
 }

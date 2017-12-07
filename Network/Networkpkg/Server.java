@@ -11,22 +11,62 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-public class Server
+public class Server extends JFrame
 {
 	private ServerSocket server;
 	private Vector<clientInfo> clientList  = new Vector<clientInfo>();
+	private JTextArea history;
+	private JLabel IPLabel;
+	private JLabel portLabel;
+	private String host = null;
+	private int port = 0;
+	
 	
 	//constructor
-	public Server()
+	public Server() 
 	{
+		
 		startRunning();
+		Container container  = getContentPane();
+		container.setLayout(new FlowLayout());
+		
+		IPLabel = new JLabel();
+		portLabel = new JLabel();
+		
+		try {
+			host = InetAddress.getLocalHost().getHostAddress();
+			port = server.getLocalPort();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("There was an error with getting the IP address or getting the port...");
+		}
+		
+		IPLabel.setText("Connect to: " + host);
+		portLabel.setText("with Port: " + Integer.toString(port));
+		
+		history  = new JTextArea(10,40);
+		history.setEditable(false);
+		
+		container.add(IPLabel);
+		container.add(portLabel);
+		container.add(new JScrollPane(history));
+		container.setBackground(new Color(204, 255, 245));
+		
+		setSize(500, 250);
+		setVisible(true);
+		
+		
+		
+		
+		
 	}
 	
 	public void startRunning()
 	{
 		try
 		{
-			server = new ServerSocket(1997); 
+
+			server = new ServerSocket(0); 
 			
 			//Trying to connect and have conversation
 			 new waitForConnection();
@@ -39,12 +79,14 @@ public class Server
 	
 	public void updateUsersOnJoin(NameAndKeyPair newClient)
 	{
+		
 		for(clientInfo currentClient : clientList)
 		{
 			ObjectOutputStream clientOut = currentClient.getOBOS();
 			
 			try {
 				clientOut.writeObject(newClient);
+				//history.append(currentClient.getNameNKey().getName() + " joined the server\n");
 			} catch (IOException e) {
 
 				System.err.println("sending new client info failed :c");
@@ -66,6 +108,7 @@ public class Server
 			ObjectOutputStream out = clientInf.getOBOS();
 			try {
 				out.writeObject(deletePair);
+				//history.append(clientInf.getNameNKey().getName() + " left the server\n");
 				out.flush();
 			} catch (IOException e) {
 				System.out.println("error sending delete client info");
@@ -168,6 +211,7 @@ public class Server
 				
 				// update the server's list and then update the clients' list
 				clientList.addElement(new clientInfo(out, clientInformation));
+				history.append(clientInformation.getName() + " joined the server\n");
 				updateUsersOnJoin(clientInformation);
 				sendClientList(out, clientInformation.getName());
 				
@@ -201,6 +245,7 @@ public class Server
 					if(clientOut.equals(out))
 					{
 						updateUsersOnLeave(clientInf);
+						history.append(clientInf.getNameNKey().getName() + " left the server\n");
 						break;
 					}
 				}
