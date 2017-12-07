@@ -2,6 +2,7 @@ package Controllerpkg;
 import Networkpkg.*;
 import java.awt.event.*;
 import java.util.List;
+import java.util.Vector;
 
 import Interfacepkg.*;
 
@@ -21,12 +22,14 @@ public class SendMessageHandler implements ActionListener
 	{
 		client = ref.getClientSocket();
 		
-		// not fully implemented. yet.
-		List<String> recievers = ref.getClientsToSendMsg(); 
+		Vector<DataChunk> recievers = ref.getClientsToSendMsg(); 
 		
 		
-		ref.appendMessage(ref.getMessage());
-		client.sendMessage(ref.getMessage());
+		for(DataChunk rec : recievers)
+		{
+			client.sendMessage(rec);
+		}
+		
 	}
 
 }

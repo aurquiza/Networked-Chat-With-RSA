@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
 import java.net.*;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -77,7 +78,19 @@ public class Chat extends JFrame implements ActionListener{
 		serverPortPrompt = new JLabel(" Server Port");
 		addressInfo = new JTextField();
 		portInfo = new JTextField();
-		clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
+		try {
+			clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
+			if(clientName.getText() == null || (clientName.getText() != null && ("".equals(clientName.getText()))))
+			{
+				throw new Exception();
+			}
+		}
+		catch(Exception o)
+		{
+			System.err.println("Name error, field is empty");
+			System.exit(0);
+		}
+		
 		clientName.setEnabled (false);
 		connectionPanel.add(createName);
 		connectionPanel.add(clientName);
@@ -126,22 +139,42 @@ public class Chat extends JFrame implements ActionListener{
 		getConnectionInfo(); // get port and IP address from user input
 	}
 	
-	public List<String> getClientsToSendMsg()
+	public Vector<DataChunk> getClientsToSendMsg()
 	{
 		ClientList boxRef = ClientList.getClientBox();
 		List<String> chosenNames =  boxRef.getChosenClients();
-		RSA userKeys;
+		
 		if(chosenNames.isEmpty())
 		{
 			System.err.println("Click on people to send message to!");
 			return null;
 		}
+		
+		// init vectors that will be packaged and sent
+		Vector<NameAndKeyPair> pairs = new Vector<NameAndKeyPair>();
+		Vector<DataChunk> dk = new Vector<DataChunk>();
+		Vector<BigInteger> cipherText;
+		//Vector<Vector<PublicKey> cipherTexts = new Vector<PublicKey>();
+		String sender = clientName.getText();
+		
+		// n^2 algorithm :c that gets user name and key pair that were selected
 		for(String n : chosenNames)
+			for(NameAndKeyPair p : connectedClients)
+				if(n.equalsIgnoreCase(p.getName()))
+					pairs.addElement(p);
+		
+		// for each selected user encrypt message with thier own 
+		// public key then package and push to the vector that will be
+		// returned
+		for(NameAndKeyPair p : pairs)
 		{
-			System.out.println("Sending message to: " + n);
+			cipherText = RSA.encryptM(message.getText(), p.getPubKey());
+			
+			DataChunk newChunk = new DataChunk(sender, cipherText, p);
+			dk.add(newChunk);
 		}
 		
-		return chosenNames;
+		return dk;
 	}
 	
 	public void updateClientList(NameAndKeyPair newClient)
@@ -152,13 +185,13 @@ public class Chat extends JFrame implements ActionListener{
 		{
 			connectedClients.remove(newClient);
 			ref.removeClient(newClient.getName());
-			mb.addMessage(newClient.getName() + " has left.");
+			MessageBox.addMessage(newClient.getName() + " has left.");
 		}
 		else
 		{
 			connectedClients.addElement(newClient);
 			ref.addNewClient(newClient.getName());
-			mb.addMessage(newClient.getName() + " has joined.");
+			MessageBox.addMessage(newClient.getName() + " has joined.");
 		}
 
 	}
@@ -268,13 +301,14 @@ public class Chat extends JFrame implements ActionListener{
 		sendButton.setEnabled(true);
 		connectButton.setEnabled(false);
 		leaveChat.setEnabled(true);
-		MessageBox.addMessage("You can send and receive messages now\n");
+		MessageBox.addMessage("You can send and receive messages now");
 	}
 	
 	// setter
-	public void appendMessage(String msg)
+	public void appendMessage(DataChunk msg)
 	{
-		MessageBox.addMessage(msg);
+		String decodedMSG = mainRSA.decryptM(msg.getEncondedMessage());
+		MessageBox.addMessage(msg.getSender() + " - " + decodedMSG);
 	}
 	
 	// getter for portInfo based on user input

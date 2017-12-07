@@ -1,8 +1,10 @@
 package Networkpkg;
 import Interfacepkg.Chat;
+import Interfacepkg.DataChunk;
 import Securitypkg.*;
 import java.io.*;
 import java.net.*;
+import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,7 +13,6 @@ public class Client extends JFrame
 	
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
-	private String message = "";
 	
 	private String host;
 	private String port;
@@ -117,11 +118,11 @@ public class Client extends JFrame
 		}
 		
 		//send message to server
-		public void sendMessage(String message)
+		public void sendMessage(DataChunk chunkOfData)
 		{
 			try
 			{
-				output.writeObject("CLIENT - " + message);
+				output.writeObject(chunkOfData);
 				output.flush();
 			}
 			catch(IOException ioException)
@@ -153,7 +154,16 @@ private class whileChatting implements Runnable
 					gui.updateClientList(sentData);
 				}
 				else
-					message = (String) o;
+				{
+					DataChunk message = (DataChunk) o;
+					if(message == null)
+						System.err.println("Oh no! client recieved null dataChunk!");
+					else
+					{
+						System.out.println("Recieved message from: " + message.getSender());
+						gui.appendMessage(message);
+					}
+				}
 			}
 			catch(ClassNotFoundException classNotFoundException)
 			{
@@ -161,6 +171,7 @@ private class whileChatting implements Runnable
 			}
 			catch(IOException e) 
 			{
+				isConnected = false;
 				System.err.println("IO Exception triggered...");
 			}
 			

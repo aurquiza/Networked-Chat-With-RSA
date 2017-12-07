@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.*;
 
 import javax.swing.*;
+
+import Interfacepkg.DataChunk;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -157,7 +160,7 @@ public class Server
 				out = new ObjectOutputStream(connection.getOutputStream());
 				in = new ObjectInputStream(connection.getInputStream());
 				
-				String clientInput;
+				DataChunk clientInput;
 				NameAndKeyPair clientInformation;
 				
 				//whenever a client is added to the server we send it to the actual server
@@ -170,9 +173,19 @@ public class Server
 				
 				while(b)
 				{
-					clientInput = (String) in.readObject();
+					clientInput = (DataChunk) in.readObject();
 					
-					System.out.println("Client: " + clientInput);
+					NameAndKeyPair sendTo = clientInput.getNames();
+					String userName = sendTo.getName();
+					for(clientInfo inf : clientList)
+					{
+						if(userName.equals(inf.getNameNKey().getName()))
+						{
+							ObjectOutputStream sendeeOut = inf.getOBOS();
+							sendeeOut.writeObject(clientInput);
+						}
+					}
+					//System.out.println("Client: " + clientInput);
 				}
 				
 				out.close();
