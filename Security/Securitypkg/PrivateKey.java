@@ -6,6 +6,8 @@
  */
 package Securitypkg;
 import java.math.BigInteger;
+//Eric Leon, Alexis Urquiza, Mariia Melnikova 
+//This is the private key class for the RSA encryption
 
 class PrivateKey
 {

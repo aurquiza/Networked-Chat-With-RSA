@@ -5,7 +5,6 @@
 	<classpathentry kind="src" path="Security"/>
 	<classpathentry kind="src" path="Network"/>
 	<classpathentry kind="src" path="Interfaces"/>
-	<classpathentry kind="src" path="TheView"/>
 	<classpathentry kind="src" path="TheModel"/>
 	<classpathentry kind="src" path="TheController"/>
 	<classpathentry kind="src" path="JUnitTesting"/>
