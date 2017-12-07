@@ -26,7 +26,24 @@ public class Menu extends JMenuBar implements ActionListener {
 			menuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(menu, 
-							"Help:\n");
+							"Help:"
+							+ "\nto use Networked Chat with RSA Encryption/Decryption"
+							+ "\nClients join to chat and before joining,"
+							+ "\n1. Each client is prompted to input their names for identification"
+							+ "\nWindow is closed if clients clicks cancel or inputs empty name"
+							+ "\nsince name is needed to be nested in clientList"
+							+ "\n2. Options to read prime numbers (2) for algorithm are:"
+							+ "\ngenerate randomly, choose from file, or input your own"
+							+ "\nThose prime numbers are being validated"
+							+ "\n3. Input IP address and port, for local run use:"
+							+ "\n127.0.0.1 and 1997"
+							+ "\n4. After that connect button becomes available"
+							+ "\n5. When successfully joining chat "
+							+ "\nUser can see list of all connected clients, and"
+							+ "\ncan select single or multiple people to send message to."
+							+ "\nAll connected clients have updated information about new user"
+							+ "\nand can send/receive message between them."
+							+ "\nClient can Leave chat and Join back.\n");
 					}	  
 			});
 		  menu.add(menuItem);
@@ -34,9 +51,10 @@ public class Menu extends JMenuBar implements ActionListener {
 			menuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(menu, 
-							"mmelni4"
-							+ "\naurqui7"
-							+ "\neleon23");
+							"Authors:"
+							+ "Mariia Melnikova (mmelni4)"
+							+ "\nAlexis Urquiza (aurqui7)"
+							+ "\nEric Leon (eleon23)");
 				}
 			});
 		menu.add(menuItem);

@@ -24,7 +24,8 @@ public class SendMessageHandler implements ActionListener
 		
 		Vector<DataChunk> recievers = ref.getClientsToSendMsg(); 
 		
-		if(recievers == null)
+
+		if (recievers == null)
 		{
 			return;
 		}

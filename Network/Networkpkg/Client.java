@@ -174,7 +174,6 @@ private class whileChatting implements Runnable
 			{	
 				//System.err.println("IO Exception triggered...");
 				isConnected = false;
-
 			}
 			
 		}while(isConnected);
@@ -182,9 +181,6 @@ private class whileChatting implements Runnable
 		closeConnection();
 		
 	}
-	
-	
-	
 }
 
 }
