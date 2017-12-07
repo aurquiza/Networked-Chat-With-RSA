@@ -10,6 +10,8 @@ package Securitypkg;
 
 import java.math.BigInteger;
 import java.util.Random;
+//Eric Leon, Alexis Urquiza, Mariia Melnikova 
+//This class is for the Miller Robin test class
 
 class MillerRabinTest
 {

@@ -5,7 +5,8 @@ import java.math.BigInteger;
 import java.util.Vector;
 
 import Networkpkg.NameAndKeyPair;
-
+//Eric Leon, Alexis Urquiza, Mariia Melnikova 
+//This class is for the data chunk
 public class DataChunk implements Serializable
 {
 	// data that both gets sent to both server and client
