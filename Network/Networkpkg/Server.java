@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.*;
 
 import javax.swing.*;
+
+import Interfacepkg.DataChunk;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +20,7 @@ public class Server extends JFrame
 	private JLabel portLabel;
 	private String host = null;
 	private int port = 0;
+	
 	
 	//constructor
 	public Server() 
@@ -46,7 +50,7 @@ public class Server extends JFrame
 		container.add(IPLabel);
 		container.add(portLabel);
 		container.add(new JScrollPane(history));
-		
+		container.setBackground(new Color(204, 255, 245));
 		
 		setSize(500, 250);
 		setVisible(true);
@@ -199,7 +203,7 @@ public class Server extends JFrame
 				out = new ObjectOutputStream(connection.getOutputStream());
 				in = new ObjectInputStream(connection.getInputStream());
 				
-				String clientInput;
+				DataChunk clientInput;
 				NameAndKeyPair clientInformation;
 				
 				//whenever a client is added to the server we send it to the actual server
@@ -213,9 +217,19 @@ public class Server extends JFrame
 				
 				while(b)
 				{
-					clientInput = (String) in.readObject();
+					clientInput = (DataChunk) in.readObject();
 					
-					System.out.println("Client: " + clientInput);
+					NameAndKeyPair sendTo = clientInput.getNames();
+					String userName = sendTo.getName();
+					for(clientInfo inf : clientList)
+					{
+						if(userName.equals(inf.getNameNKey().getName()))
+						{
+							ObjectOutputStream sendeeOut = inf.getOBOS();
+							sendeeOut.writeObject(clientInput);
+						}
+					}
+					//System.out.println("Client: " + clientInput);
 				}
 				
 				out.close();

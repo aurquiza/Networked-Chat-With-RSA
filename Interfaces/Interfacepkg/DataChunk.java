@@ -1,25 +1,28 @@
 package Interfacepkg;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Vector;
 
-public class DataChunk
+import Networkpkg.NameAndKeyPair;
+
+public class DataChunk implements Serializable
 {
 	// data that both gets sent to both server and client
 	private String sender;
 	
 	// data that gets sent to the server to process
-	private Vector<Vector<BigInteger>> encondedMessages;
-	private Vector<String> names;
+	private Vector<BigInteger> encondedMessages;
+	private NameAndKeyPair name;
 	
 	// data that gets sent to client to process
 	private Vector<BigInteger> sentMsg;
 	
-	public DataChunk(String sender, Vector<Vector<BigInteger>> encondedMessages, Vector<String> names)
+	public DataChunk(String sender, Vector<BigInteger> encondedMessages, NameAndKeyPair names)
 	{
 		this.sender = sender;
 		this.encondedMessages = encondedMessages;
-		this.names = names;
+		this.name = names;
 		
 		sentMsg = null;
 	}
@@ -30,19 +33,19 @@ public class DataChunk
 		this.sentMsg = sentMsg;
 	}
 	
-
+	
 	public String getSender() 
 	{
 		return sender;
 	}
 
-	public Vector<Vector<BigInteger>> getEncondedMessages() {
+	public Vector<BigInteger> getEncondedMessage() {
 		return encondedMessages;
 	}
 	
-	public Vector<String> getNames()
+	public NameAndKeyPair getNames()
 	{
-		return names;
+		return name;
 	}
 	
 	public Vector<BigInteger> getSentMsg()

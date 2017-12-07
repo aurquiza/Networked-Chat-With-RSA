@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
 import java.net.*;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -78,17 +79,19 @@ public class Chat extends JFrame implements ActionListener{
 		addressInfo = new JTextField();
 		portInfo = new JTextField();
 		try {
-		clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
-			if(clientName.getText() == null || (clientName.getText() != null && ("".equals(clientName.getText()))))   
-				{
-			    	throw new Exception();
-				}
+			clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
+			if(clientName.getText() == null || (clientName.getText() != null && ("".equals(clientName.getText()))))
+			{
+				throw new Exception();
+			}
 		}
-		catch (Exception e)
+		catch(Exception o)
 		{
 			System.err.println("Name error, field is empty");
 			System.exit(0);
 		}
+
+
 		clientName.setEnabled (false);
 		connectionPanel.add(createName);
 		connectionPanel.add(clientName);
@@ -137,22 +140,42 @@ public class Chat extends JFrame implements ActionListener{
 		getConnectionInfo(); // get port and IP address from user input
 	}
 	
-	public List<String> getClientsToSendMsg()
+	public Vector<DataChunk> getClientsToSendMsg()
 	{
 		ClientList boxRef = ClientList.getClientBox();
 		List<String> chosenNames =  boxRef.getChosenClients();
-		RSA userKeys;
+		
 		if(chosenNames.isEmpty())
 		{
 			System.err.println("Click on people to send message to!");
 			return null;
 		}
+		
+		// init vectors that will be packaged and sent
+		Vector<NameAndKeyPair> pairs = new Vector<NameAndKeyPair>();
+		Vector<DataChunk> dk = new Vector<DataChunk>();
+		Vector<BigInteger> cipherText;
+		//Vector<Vector<PublicKey> cipherTexts = new Vector<PublicKey>();
+		String sender = clientName.getText();
+		
+		// n^2 algorithm :c that gets user name and key pair that were selected
 		for(String n : chosenNames)
+			for(NameAndKeyPair p : connectedClients)
+				if(n.equalsIgnoreCase(p.getName()))
+					pairs.addElement(p);
+		
+		// for each selected user encrypt message with thier own 
+		// public key then package and push to the vector that will be
+		// returned
+		for(NameAndKeyPair p : pairs)
 		{
-			System.out.println("Sending message to: " + n);
+			cipherText = RSA.encryptM(message.getText(), p.getPubKey());
+			
+			DataChunk newChunk = new DataChunk(sender, cipherText, p);
+			dk.add(newChunk);
 		}
 		
-		return chosenNames;
+		return dk;
 	}
 	
 	public void updateClientList(NameAndKeyPair newClient)
@@ -243,15 +266,34 @@ public class Chat extends JFrame implements ActionListener{
         	   System.out.println(counter);
         	   Random rand = new Random();
         	   int value = rand.nextInt(counter-1);
-	           setFirstPrime(primes.get(value));
+	       setFirstPrime(primes.get(value));
 	           
-	           value = rand.nextInt(counter-1);
-	           setSecondPrime(primes.get(value));
-	           
+	       value = rand.nextInt(counter-1);
+	       setSecondPrime(primes.get(value));
+	       
+	       RSA tempRSA = null;
+	       boolean checkRSA;
+	           try {
 	           // set rsa thing in here too
-	           RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-	           mainRSA = tempRSA;
+	        	         tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+	                 checkRSA = tempRSA.isInputValid();
+	           }
+	        	   catch(NumberFormatException e) {
+	        	        checkRSA = false;
+	           }
+	           catch(ArithmeticException e) {
+	        		   checkRSA = false;
+	           }
 	           
+	        if(checkRSA ==  false) {
+		    		//repromptUser
+		    		
+		    }
+		    else {
+		    		mainRSA = tempRSA;
+		    }
+	           
+	  
 	           //if wrong, reprompt the user
 	           
 	           bufferedReader.close();
@@ -283,9 +325,10 @@ public class Chat extends JFrame implements ActionListener{
 	}
 	
 	// setter
-	public void appendMessage(String msg)
+	public void appendMessage(DataChunk msg)
 	{
-		MessageBox.addMessage(msg);
+		String decodedMSG = mainRSA.decryptM(msg.getEncondedMessage());
+		MessageBox.addMessage(msg.getSender() + " - " + decodedMSG);
 	}
 	
 	// getter for portInfo based on user input
@@ -354,14 +397,48 @@ public class Chat extends JFrame implements ActionListener{
 		        }
 		        else
 		        {
-		        	setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
-		        	setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
+		        	RSA tempRSA = null;
+		        	boolean checkRSA;
+		        	try {
+		        		setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
+		        		setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
+		        	 	tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+			        	checkRSA = tempRSA.isInputValid();
+		        	}
+		        	catch(NumberFormatException e) {
+		        		checkRSA = false;
+		        	}
+		        	catch(ArithmeticException e) {
+		        		checkRSA = false;
+		        	}
 		        	//make rsa thing here
-			        RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-				    mainRSA = tempRSA;
+		        
+		       
+		       
+		        	
+			    //testing for RSA encryptions
+			    if(checkRSA ==  false) {
+			    		//repromptUser
+			    		while(checkRSA ==  false) {
+			    		 	setFirstPrime(JOptionPane.showInputDialog(this, "ERROR please type in your First Prime Number:"));
+				        	setSecondPrime(JOptionPane.showInputDialog(this, "ERROR please type in your Second Prime Number:"));
+				        	//make rsa thing here
+					    tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+					    checkRSA = tempRSA.isInputValid();
+			    		}
+			    }
+			    else {
+			    		mainRSA = tempRSA;
+			    }
 			    
-			    //if wrong reprompt the user
-			           
+			    
+			    
+			    
+			  
+			    
+				   
+				    
+				 
 		        }
 	        }
 	        else {

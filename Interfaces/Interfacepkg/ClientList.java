@@ -32,11 +32,9 @@ public class ClientList {
 		clientPanel = new JPanel();
 		list = new JList<String>();
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		//list.setVisibleRowCount(23);
-		//list = new JTextArea(23, 30);
-//		list.setEditable(false);
-//		list.setLineWrap(true);
-//		list.setWrapStyleWord(true);
+
+		list.setVisibleRowCount(23);
+		
 		JScrollPane panel = new JScrollPane(list);
 		panel.setLayout(new ScrollPaneLayout());
 		panel.setBorder(BorderFactory.createTitledBorder("Clients Online:"));

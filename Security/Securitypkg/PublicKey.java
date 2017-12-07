@@ -7,7 +7,7 @@
 package Securitypkg;
 import java.math.BigInteger;
 
-class PublicKey
+public class PublicKey
 {
 	//  key, val pair for encryption
 	private BigInteger n;
