@@ -1,5 +1,7 @@
 package Interfacepkg;
   
+import java.awt.Color;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -12,8 +14,9 @@ public class MessageBox extends JPanel
 	
 	public MessageBox()
 	{
-		messageHistory = new JTextArea(20, 35);
+		messageHistory = new JTextArea(20, 30);
 		messageHistory.setEditable(false);
+		this.setBackground(new Color(204, 255, 245));
 		this.add(new JScrollPane(messageHistory));
 	}
 	
