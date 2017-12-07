@@ -161,7 +161,8 @@ private class whileChatting implements Runnable
 			}
 			catch(IOException e) 
 			{
-				System.err.println("IO Exception triggered...");
+				//System.err.println("IO Exception triggered...");
+				isConnected = false;
 			}
 			
 		}while(isConnected);	

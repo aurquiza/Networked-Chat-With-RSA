@@ -25,14 +25,14 @@ public class ClientList {
 	
 	private static ClientList clientlist = null;
 	private static JPanel clientPanel = null;
-	private JList list;
+	private JList<String> list;
 	private static Vector<String> currentList = new Vector<String>();
 	
 	private ClientList(){
 		clientPanel = new JPanel();
-		list = new JList();
+		list = new JList<String>();
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		list.setVisibleRowCount(23);
+		//list.setVisibleRowCount(23);
 		//list = new JTextArea(23, 30);
 //		list.setEditable(false);
 //		list.setLineWrap(true);
@@ -41,6 +41,7 @@ public class ClientList {
 		panel.setLayout(new ScrollPaneLayout());
 		panel.setBorder(BorderFactory.createTitledBorder("Clients Online:"));
 		panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		panel.setPreferredSize(new Dimension(280, 390));
 		clientPanel.add(panel, BorderLayout.CENTER);
 	}
 	
