@@ -17,6 +17,7 @@ public class Server extends JFrame
 	private JLabel portLabel;
 	private String host = null;
 	private int port = 0;
+	
 	//constructor
 	public Server() 
 	{
