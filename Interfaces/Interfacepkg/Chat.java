@@ -343,14 +343,48 @@ public class Chat extends JFrame implements ActionListener{
 		        }
 		        else
 		        {
-		        	setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
-		        	setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
+		        	RSA tempRSA = null;
+		        	boolean checkRSA;
+		        	try {
+		        		setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
+		        		setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
+		        	 	tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+			        	checkRSA = tempRSA.isInputValid();
+		        	}
+		        	catch(NumberFormatException e) {
+		        		checkRSA = false;
+		        	}
+		        	catch(ArithmeticException e) {
+		        		checkRSA = false;
+		        	}
 		        	//make rsa thing here
-			        RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-				    mainRSA = tempRSA;
+		        
+		       
+		       
+		        	
+			    //testing for RSA encryptions
+			    if(checkRSA ==  false) {
+			    		//repromptUser
+			    		while(checkRSA ==  false) {
+			    		 	setFirstPrime(JOptionPane.showInputDialog(this, "ERROR please type in your First Prime Number:"));
+				        	setSecondPrime(JOptionPane.showInputDialog(this, "ERROR please type in your Second Prime Number:"));
+				        	//make rsa thing here
+					    tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+					    checkRSA = tempRSA.isInputValid();
+			    		}
+			    }
+			    else {
+			    		mainRSA = tempRSA;
+			    }
 			    
-			    //if wrong reprompt the user
-			           
+			    
+			    
+			    
+			  
+			    
+				   
+				    
+				 
 		        }
 	        }
 	        else {

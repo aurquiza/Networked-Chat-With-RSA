@@ -18,6 +18,7 @@ public class Server extends JFrame
 	private String host = null;
 	private int port = 0;
 	
+	
 	//constructor
 	public Server() 
 	{
@@ -46,7 +47,7 @@ public class Server extends JFrame
 		container.add(IPLabel);
 		container.add(portLabel);
 		container.add(new JScrollPane(history));
-		
+		container.setBackground(new Color(204, 255, 245));
 		
 		setSize(500, 250);
 		setVisible(true);

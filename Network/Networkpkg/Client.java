@@ -142,9 +142,10 @@ private class whileChatting implements Runnable
 	public void run() 
 	{
 		
-		do{
+		do {
 			try
 			{
+				
 				Object o = input.readObject();
 				
 				if(o instanceof NameAndKeyPair)
@@ -160,11 +161,12 @@ private class whileChatting implements Runnable
 				System.err.println("ClassNotFound Exception triggered...");
 			}
 			catch(IOException e) 
-			{
-				System.err.println("IO Exception triggered...");
+			{	
+				//System.err.println("IO Exception triggered...");
+				isConnected = false;
 			}
 			
-		}while(isConnected);	
+		}while(isConnected);
 	
 		closeConnection();
 		
