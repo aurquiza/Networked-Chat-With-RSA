@@ -232,15 +232,34 @@ public class Chat extends JFrame implements ActionListener{
         	   System.out.println(counter);
         	   Random rand = new Random();
         	   int value = rand.nextInt(counter-1);
-	           setFirstPrime(primes.get(value));
+	       setFirstPrime(primes.get(value));
 	           
-	           value = rand.nextInt(counter-1);
-	           setSecondPrime(primes.get(value));
-	           
+	       value = rand.nextInt(counter-1);
+	       setSecondPrime(primes.get(value));
+	       
+	       RSA tempRSA = null;
+	       boolean checkRSA;
+	           try {
 	           // set rsa thing in here too
-	           RSA tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-	           mainRSA = tempRSA;
+	        	         tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+	                 checkRSA = tempRSA.isInputValid();
+	           }
+	        	   catch(NumberFormatException e) {
+	        	        checkRSA = false;
+	           }
+	           catch(ArithmeticException e) {
+	        		   checkRSA = false;
+	           }
 	           
+	        if(checkRSA ==  false) {
+		    		//repromptUser
+		    		
+		    }
+		    else {
+		    		mainRSA = tempRSA;
+		    }
+	           
+	  
 	           //if wrong, reprompt the user
 	           
 	           bufferedReader.close();
