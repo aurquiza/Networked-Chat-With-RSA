@@ -12,8 +12,6 @@ package Securitypkg;
 import java.math.BigInteger;
 import java.util.*;
 
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is the actual RSA algorithm
 
 public class RSA
 {

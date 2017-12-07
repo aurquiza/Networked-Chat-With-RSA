@@ -1,6 +1,4 @@
 package Interfacepkg;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This class is for the client list
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
