@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import Networkpkg.NameAndKeyPair;
 
+@SuppressWarnings("serial")
 public class DataChunk implements Serializable
 {
 	// data that both gets sent to both server and client
