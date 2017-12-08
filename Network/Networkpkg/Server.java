@@ -54,11 +54,6 @@ public class Server extends JFrame
 		
 		setSize(500, 250);
 		setVisible(true);
-		
-		
-		
-		
-		
 	}
 	
 	public void startRunning()
@@ -145,13 +140,6 @@ public class Server extends JFrame
 		}
 		
 		
-	}
-	
-	
-	public static void main(String[] args)
-	{
-		Server serverTest = new Server();
-	
 	}
 	
 	private class waitForConnection implements Runnable
