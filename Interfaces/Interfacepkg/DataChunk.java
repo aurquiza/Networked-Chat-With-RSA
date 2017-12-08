@@ -1,3 +1,7 @@
+//
+//This class represents the block of messages that is being sent to Server from Client
+//
+
 package Interfacepkg;
 
 import java.io.Serializable;
