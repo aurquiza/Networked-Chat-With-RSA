@@ -1,8 +1,8 @@
 # Networked-Chat-With-RSA
 CS 342 Project 5 with Professor Troy
-Alexis Urquiza - aurqui7\n
-Mariia Melnikova - mmelni4\n
-Eric Leon - eleon23\n
+Alexis Urquiza - aurqui7
+Mariia Melnikova - mmelni4
+Eric Leon - eleon23
 
 Into use Networked Chat with RSA Encryption/Decryption
 Clients join to chat and before joining,
