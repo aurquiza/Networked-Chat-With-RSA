@@ -1,7 +1,7 @@
- /* Chat class contains the Frame for all UI elements
+/* Chat class contains the Frame for all UI elements
  * and implements a Singleton design pattern
  * since we'll only need one instance of the
- * "parent" container for each client
+ * "parent" container
  */
 
 package Interfacepkg;
@@ -9,13 +9,9 @@ import Securitypkg.RSA;
 import Controllerpkg.*;
 import Networkpkg.Client;
 import Networkpkg.NameAndKeyPair;
-import Networkpkg.clientInfo;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
-import java.net.*;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,40 +24,34 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class Chat extends JFrame implements ActionListener{
-	private static Chat CONTAINER = null;
+	private static Chat CONTAINER = null; // initialize instance to null for singleton design
+	
 	  // GUI items
 	  private JButton sendButton; // send message
 	  private JButton connectButton; // join chat
 	  private JButton leaveChat; // leave chat
-
 	  private JLabel serverAddressPrompt;
 	  private JLabel serverPortPrompt;
 	  private JTextField addressInfo;
 	  private JTextField portInfo;
 	  private JTextField message;
-
 	  private JTextField clientName;
+	  private MessageBox mb;	  
+	  private Client client = null;
+	  private RSA mainRSA;	  
 	  
+	  // Big Integer type used for primes since their value assumed to be greater than int
 	  static BigInteger firstPrime;
 	  static BigInteger secondPrime;
-	  
-	  // vector of initial values sent to server, contains:
-	  // client name, public and private keys, server address and port
-
-	  private JTextField clientKey;
-	  private MessageBox mb;
-	  
-	  private Client client = null;
-	  private RSA mainRSA;
-	  
+  
 	  // this keeps track of every client that is connected to the server
 	  private Vector<NameAndKeyPair> connectedClients = new Vector<NameAndKeyPair>();
 	
 	private Chat() 
 	{
 		JPanel container = new JPanel();
-		container.setLayout(new GridLayout(1,2));
-		JPanel left = new JPanel();
+		container.setLayout(new GridLayout(1,2)); // one row, two columns layout
+		JPanel left = new JPanel(); 
 		JPanel connectionPanel = new JPanel();
 		JPanel right = new JPanel();
 		left.setLayout(new BorderLayout());
@@ -69,15 +59,17 @@ public class Chat extends JFrame implements ActionListener{
 		JLabel createName = new JLabel(" Your Name");
 		clientName = new JTextField();
 		connectButton = new JButton("Join Chat");
-
 		connectButton.setEnabled(false); //set enabled until user inputs all data
 		leaveChat = new JButton("Leave Chat");
 		leaveChat.setEnabled(false); 
-
 		serverAddressPrompt = new JLabel(" Server Address");
 		serverPortPrompt = new JLabel(" Server Port");
 		addressInfo = new JTextField();
 		portInfo = new JTextField();
+		
+		// add validation for client Name input
+		// exit if cancel is clicked or if nothing is typed
+		// client name is needed for server to identify connected clients
 		try {
 			clientName.setText(JOptionPane.showInputDialog(this, "Type in your Name:"));
 			if(clientName.getText() == null || (clientName.getText() != null && ("".equals(clientName.getText()))))
@@ -90,7 +82,6 @@ public class Chat extends JFrame implements ActionListener{
 			System.err.println("Name error, field is empty");
 			System.exit(0);
 		}
-
 
 		clientName.setEnabled (false);
 		connectionPanel.add(createName);
@@ -121,10 +112,8 @@ public class Chat extends JFrame implements ActionListener{
 		messagePart.add(message);
 		messagePart.add(sendButton);
 		messagePart.setBackground(new Color(204, 255, 245));
-		left.add(messagePart, BorderLayout.SOUTH);
-		
-		right.add(ClientList.getClientList());
-		
+		left.add(messagePart, BorderLayout.SOUTH);		
+		right.add(ClientList.getClientList());		
 		right.setBackground(new Color(204, 255, 245));
 		container.add(left);
 		container.add(right);
@@ -140,6 +129,7 @@ public class Chat extends JFrame implements ActionListener{
 		getConnectionInfo(); // get port and IP address from user input
 	}
 	
+	// vector represents client list
 	public Vector<DataChunk> getClientsToSendMsg()
 	{
 		ClientList boxRef = ClientList.getClientBox();
@@ -157,7 +147,6 @@ public class Chat extends JFrame implements ActionListener{
 		Vector<NameAndKeyPair> pairs = new Vector<NameAndKeyPair>();
 		Vector<DataChunk> dk = new Vector<DataChunk>();
 		Vector<BigInteger> cipherText;
-		//Vector<Vector<PublicKey> cipherTexts = new Vector<PublicKey>();
 		String sender = clientName.getText();
 		
 		// n^2 algorithm :c that gets user name and key pair that were selected
@@ -166,7 +155,7 @@ public class Chat extends JFrame implements ActionListener{
 				if(n.equalsIgnoreCase(p.getName()))
 					pairs.addElement(p);
 		
-		// for each selected user encrypt message with thier own 
+		// for each selected user encrypt message with their own 
 		// public key then package and push to the vector that will be
 		// returned
 		for(NameAndKeyPair p : pairs)
@@ -180,6 +169,7 @@ public class Chat extends JFrame implements ActionListener{
 		return dk;
 	}
 	
+	// when new client is joined, update client list container
 	public void updateClientList(NameAndKeyPair newClient)
 	{ 
 		ClientList ref = ClientList.getClientBox();
@@ -196,7 +186,6 @@ public class Chat extends JFrame implements ActionListener{
 			ref.addNewClient(newClient.getName());
 			MessageBox.addMessage(newClient.getName() + " has joined.");
 		}
-
 	}
 
 	public JTextField getIPaddress()
@@ -209,7 +198,6 @@ public class Chat extends JFrame implements ActionListener{
 		return portInfo;
 	}
 	
-
 	public JTextField getNameInfo()
 	{
 		return clientName;
@@ -242,6 +230,10 @@ public class Chat extends JFrame implements ActionListener{
 		secondPrime = new BigInteger(num);
 	}
 	
+	// readPrimes is responsible for taking two prime numbers
+	// depending on user choice
+	// call to RSA checks prime numbers validity
+	
 	void readPrimes(String fileName)
 	{
 		 
@@ -265,11 +257,9 @@ public class Chat extends JFrame implements ActionListener{
 	        	   counter++;
 	           } 
 	           
-        	   //System.out.println(counter);
-        	   Random rand = new Random();
-        	   int value = rand.nextInt(counter-1);
-	       setFirstPrime(primes.get(value));
-	           
+    	   Random rand = new Random();
+    	   int value = rand.nextInt(counter-1); 	   
+	       setFirstPrime(primes.get(value));	           
 	       value = rand.nextInt(counter-1);
 	       setSecondPrime(primes.get(value));
 	       
@@ -287,16 +277,7 @@ public class Chat extends JFrame implements ActionListener{
 	        		   checkRSA = false;
 	           }
 	           
-	        if(checkRSA ==  false) {
-		    		//repromptUser
-		    		
-		    }
-		    else {
-		    		mainRSA = tempRSA;
-		    }
-	           
-	  
-	           //if wrong, reprompt the user
+		   mainRSA = tempRSA;
 	           
 	           bufferedReader.close();
 	           fileReader.close();
@@ -315,7 +296,6 @@ public class Chat extends JFrame implements ActionListener{
 	       }
 	}
 
-	// setter
 	public void allowAccess(Client cl)
 	{
 		client = cl;
@@ -326,7 +306,6 @@ public class Chat extends JFrame implements ActionListener{
 		MessageBox.addMessage("You can send and receive messages now");
 	}
 	
-	// setter
 	public void appendMessage(DataChunk msg)
 	{
 		String decodedMSG = mainRSA.decryptM(msg.getEncondedMessage());
@@ -343,8 +322,7 @@ public class Chat extends JFrame implements ActionListener{
 	public String getIPInfo()
 	{
 		return addressInfo.getText();
-	}
-	
+	}	
 	
 	public RSA getRSA() 
 	{
@@ -357,12 +335,12 @@ public class Chat extends JFrame implements ActionListener{
 		return message.getText();
 	}
 	
-	// getter
 	public Client getClientSocket()
 	{
 		return client;
 	}
-	
+		
+	// singleton design implementation
 	public static Chat getChatContainer() 
 	{
 		if(CONTAINER == null)
@@ -372,7 +350,9 @@ public class Chat extends JFrame implements ActionListener{
 		
 	    return CONTAINER;
 	}
+
 	
+	// driver function that takes user choice for prime numbers generation 
 	void initiateOption() 
 	{
 		int choice;
@@ -449,6 +429,7 @@ public class Chat extends JFrame implements ActionListener{
 		client.closeConnection();
 	}
 	
+	// when user reenter the chat, clear clientInfo window
 	public void clearUserList()
 	{
 		ClientList cl = ClientList.getClientBox();
@@ -462,4 +443,3 @@ public class Chat extends JFrame implements ActionListener{
 		
 	}
 }
-
