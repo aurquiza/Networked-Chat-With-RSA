@@ -24,8 +24,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is the chat class
+
 
 @SuppressWarnings("serial")
 public class Chat extends JFrame implements ActionListener{
@@ -387,7 +386,7 @@ public class Chat extends JFrame implements ActionListener{
 	        		secondChoice = JOptionPane.showConfirmDialog(null, "Choose your File to load from (YES)\nInput yor own primes(NO)?", "Generate Key Options", JOptionPane.YES_NO_OPTION);
 	        		if (secondChoice == JOptionPane.YES_OPTION) 
 	        		{
-	        			JFileChooser fileChooser = new JFileChooser();
+	        			JFileChooser fileChooser = new JFileChooser(".");
 	        			fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); // specify current working directory
 	        			int result = fileChooser.showOpenDialog(this);
 					if (result == JFileChooser.APPROVE_OPTION) 

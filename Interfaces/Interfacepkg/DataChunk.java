@@ -1,3 +1,8 @@
+//
+// This class represents the block of messages that is being sent to Server from Client
+// Vector data structure is used for safe threading
+//
+
 package Interfacepkg;
 
 import java.io.Serializable;
@@ -5,8 +10,8 @@ import java.math.BigInteger;
 import java.util.Vector;
 
 import Networkpkg.NameAndKeyPair;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This class is for the data chunk
+
+@SuppressWarnings("serial")
 public class DataChunk implements Serializable
 {
 	// data that both gets sent to both server and client

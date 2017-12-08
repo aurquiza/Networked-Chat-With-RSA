@@ -1,3 +1,8 @@
+/*
+ * This is the JPanel in the gui for the messages the client will recieve and send.
+ * This will also let the user know if a connection was made or if the user successfully disconnected
+ * 
+ */
 package Interfacepkg;
   
 import java.awt.Color;
@@ -5,8 +10,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is for the message box class
+
 @SuppressWarnings("serial")
 public class MessageBox extends JPanel
 {

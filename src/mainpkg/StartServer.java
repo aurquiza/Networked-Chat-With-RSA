@@ -1,7 +1,12 @@
 package mainpkg;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is the start server class that will setup the server that the client will connect to
+
+import Interfacepkg.Chat;
+import Networkpkg.Server;
+
 public class StartServer
 {
-
+	public static void main(String[] args)
+	{
+		Server serverTest = new Server();
+	}
 }

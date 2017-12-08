@@ -8,22 +8,15 @@ import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This class is for client and will connect the client to the server and be able to send messages between 
-//other clients as well.
 public class Client extends JFrame
 {
 	
-	//set up output and input streams
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	
-	//set up the host and port
 	private String host;
 	private String port;
 	
-	//setuo the socket, instance of GUI, and boolean to see if it is connected
 	private Socket connection;
 	private boolean isConnected = false;
 	private Chat gui;
@@ -35,11 +28,9 @@ public class Client extends JFrame
 			this.port = port;
 			this.gui = gui;
 			
-			//start running the client code
 			startRunning();
 		}
 		
-		//checks the connection status
 		public boolean checkConnectionStatus()
 		{
 			return isConnected;
@@ -48,10 +39,8 @@ public class Client extends JFrame
 		//connect to server
 		public void startRunning()
 		{
-			//try and catch to connect to the server and start running
 			try
-			{	
-				//connect server
+			{
 				connectToServer();
 				
 				if(connection == null)
@@ -60,7 +49,7 @@ public class Client extends JFrame
 					isConnected = false;
 					return;
 				}
-				//set up streams
+				
 				setupStreams();
 				
 				// send object which has user's information
@@ -71,7 +60,6 @@ public class Client extends JFrame
 				output.writeObject(clientNameNKey);
 				output.flush();
 				
-				//keep running while chatting
 				new whileChatting();
 			}
 			catch(EOFException eofException)
@@ -154,7 +142,7 @@ private class whileChatting implements Runnable
 
 	public void run() 
 	{
-		//client will be sending messages here
+		
 		do {
 			try
 			{

@@ -7,8 +7,6 @@
 package Securitypkg;
 
 import java.math.BigInteger;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This class is for the EuclidianAlgorithm
 
 class EuclidianAlgorithm 
 {

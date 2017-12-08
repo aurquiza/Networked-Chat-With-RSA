@@ -13,8 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-//Eric Leon, Alexis Urquiza, Mariia Melnikova 
-//This is the class for the menu
+
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar implements ActionListener {
 	JMenu menu;
