@@ -1,5 +1,6 @@
 //
-//This class represents the block of messages that is being sent to Server from Client
+// This class represents the block of messages that is being sent to Server from Client
+// Vector data structure is used for safe threading
 //
 
 package Interfacepkg;
