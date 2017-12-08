@@ -5,7 +5,6 @@
 package mainpkg;
 
 import Interfacepkg.Chat;
-import Securitypkg.RSA;
 
 public class StartClient
 {

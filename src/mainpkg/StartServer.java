@@ -5,7 +5,6 @@
  */
 package mainpkg;
 
-import Interfacepkg.Chat;
 import Networkpkg.Server;
 
 public class StartServer
@@ -13,6 +12,7 @@ public class StartServer
 	public static void main(String[] args)
 	{
 		// begin server program
+		@SuppressWarnings("unused")
 		Server serverTest = new Server();
 	}
 }
