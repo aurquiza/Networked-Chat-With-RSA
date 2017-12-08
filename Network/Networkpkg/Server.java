@@ -11,10 +11,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+
+//This class is for the server code, this server will hold information of all the clients that join the server and display the information to the clients
+//This server code will also have a GUI that we display once a client joins and when they leave
 public class Server extends JFrame
 {
+	//variables for the server socket
 	private ServerSocket server;
+	//vector variable for the client list
 	private Vector<clientInfo> clientList  = new Vector<clientInfo>();
+	
+	//GUI variables for the Server GUI which will have a history box, an iplabel and port label
 	private JTextArea history;
 	private JLabel IPLabel;
 	private JLabel portLabel;
@@ -25,14 +32,17 @@ public class Server extends JFrame
 	//constructor
 	public Server() 
 	{
-		
+		//start running the server and setup GUI
 		startRunning();
+		//setup container and layout
 		Container container  = getContentPane();
 		container.setLayout(new FlowLayout());
 		
+		//create new labels that will hold the information of which ip address and port to connect to
 		IPLabel = new JLabel();
 		portLabel = new JLabel();
 		
+		//try and catch to get the ip address and port
 		try {
 			host = InetAddress.getLocalHost().getHostAddress();
 			port = server.getLocalPort();
@@ -41,21 +51,26 @@ public class Server extends JFrame
 			System.out.println("There was an error with getting the IP address or getting the port...");
 		}
 		
+		//set the text for the ip label and port
 		IPLabel.setText("Connect to: " + host);
 		portLabel.setText("with Port: " + Integer.toString(port));
 		
+		//setup the histry box
 		history  = new JTextArea(10,40);
 		history.setEditable(false);
 		
+		//add objects to the container
 		container.add(IPLabel);
 		container.add(portLabel);
 		container.add(new JScrollPane(history));
 		container.setBackground(new Color(204, 255, 245));
 		
+		//set the size and visible
 		setSize(500, 250);
 		setVisible(true);
 	}
 	
+	//server code to start the waitforconnection phase
 	public void startRunning()
 	{
 		try
@@ -71,7 +86,7 @@ public class Server extends JFrame
 		}
 	}
 
-	
+	//method to update users once they join
 	public void updateUsersOnJoin(NameAndKeyPair newClient)
 	{
 		
@@ -89,6 +104,7 @@ public class Server extends JFrame
 		}
 	}
 	
+	//method to update users once they leave
 	public void updateUsersOnLeave(clientInfo leavingClient)
 	{
 		// make dummy NameAndKey that tell other clients to delete client
@@ -112,6 +128,7 @@ public class Server extends JFrame
 		}
 	}
 	
+	//method to send the client list where it is needed
 	public void sendClientList(ObjectOutputStream out, String clientName)
 	{
 		for(clientInfo cInfo : clientList)
@@ -132,6 +149,7 @@ public class Server extends JFrame
 		}
 	}
 	
+	//method to print all the users/clients
 	public void printUsers() {
 		
 		for(clientInfo client : clientList) {
@@ -142,6 +160,7 @@ public class Server extends JFrame
 		
 	}
 	
+	//private class to wait for a connection from the client
 	private class waitForConnection implements Runnable
 	{
 		
@@ -169,7 +188,7 @@ public class Server extends JFrame
 	}
 	
 	
-	
+	//private class that will deal with the communication between a client and server and other clients
 	private class communicationThread implements Runnable
 	{
 		private Socket connection;
@@ -181,13 +200,15 @@ public class Server extends JFrame
 			new Thread(this).start();
 		}
 		
+		//actual communication code for the client and server
 		public void run() 
 		{
+			//setup streams
 			ObjectOutputStream out = null;
 			ObjectInputStream in = null;
 			try 
 			{
-				
+				//setup streams
 				out = new ObjectOutputStream(connection.getOutputStream());
 				in = new ObjectInputStream(connection.getInputStream());
 				
@@ -237,7 +258,7 @@ public class Server extends JFrame
 						break;
 					}
 				}
-				//System.out.println("Theres an error with the communication thread");
+				
 			}
 
 			

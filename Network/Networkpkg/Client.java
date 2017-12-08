@@ -8,15 +8,18 @@ import java.util.Vector;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+//This class will be in charge of the client code which includes connecting to a server and being able to send messages back and forth between the clients
 public class Client extends JFrame
 {
-	
+	//variables for the ouput and input streams
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	
+	//variables for the host and port number
 	private String host;
 	private String port;
 	
+	//variables for the socket, instance of the chat GUI, and a boolean to see if the client is connected
 	private Socket connection;
 	private boolean isConnected = false;
 	private Chat gui;
@@ -28,9 +31,11 @@ public class Client extends JFrame
 			this.port = port;
 			this.gui = gui;
 			
+			//start running the client code
 			startRunning();
 		}
 		
+		//check the connection of the client
 		public boolean checkConnectionStatus()
 		{
 			return isConnected;
@@ -132,6 +137,7 @@ public class Client extends JFrame
 		}
 		
 
+//private class for when the client is chatting
 private class whileChatting implements Runnable
 {
 	
@@ -143,10 +149,12 @@ private class whileChatting implements Runnable
 	public void run() 
 	{
 		
+		//try and catch's for when the client is sending messages
 		do {
 			try
 			{
 				
+				//read in the object of the client and send out the message
 				Object o = input.readObject();
 				
 				if(o instanceof NameAndKeyPair)
