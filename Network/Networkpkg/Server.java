@@ -217,7 +217,7 @@ public class Server extends JFrame
 			ObjectInputStream in = null;
 			try 
 			{
-
+				
 				out = new ObjectOutputStream(connection.getOutputStream());
 				in = new ObjectInputStream(connection.getInputStream());
 				
@@ -258,7 +258,7 @@ public class Server extends JFrame
 				for(clientInfo clientInf : clientList)
 				{
 					ObjectOutputStream clientOut = clientInf.getOBOS();
-					NameAndKeyPair pair = clientInf.getNameNKey();
+					//NameAndKeyPair pair = clientInf.getNameNKey();
 					if(clientOut.equals(out))
 					{
 						updateUsersOnLeave(clientInf);

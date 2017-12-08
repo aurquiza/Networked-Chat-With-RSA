@@ -23,6 +23,7 @@ private Chat ref;
 	public void actionPerformed(ActionEvent event)
 	{
 		ref.callCloseConnection();
+		ref.clearUserList();
 		MessageBox.addMessage("You are disconnected from chat now");
 	}
 	

@@ -45,6 +45,12 @@ public class ClientList {
 		clientPanel.add(panel, BorderLayout.CENTER);
 	}
 	
+	public void emptyClientList()
+	{
+		currentList.clear();
+		list.setListData(currentList);
+	}
+	
 	public void addNewClient(String user)
 	{
 		currentList.addElement(user);

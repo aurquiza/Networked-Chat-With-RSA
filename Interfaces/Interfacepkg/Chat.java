@@ -152,6 +152,8 @@ public class Chat extends JFrame implements ActionListener{
 			return null;
 		}
 		
+		MessageBox.addMessage("You - " + message.getText());
+		
 		// init vectors that will be packaged and sent
 		Vector<NameAndKeyPair> pairs = new Vector<NameAndKeyPair>();
 		Vector<DataChunk> dk = new Vector<DataChunk>();
@@ -264,7 +266,7 @@ public class Chat extends JFrame implements ActionListener{
 	        	   counter++;
 	           } 
 	           
-        	   System.out.println(counter);
+        	   //System.out.println(counter);
         	   Random rand = new Random();
         	   int value = rand.nextInt(counter-1);
 	       setFirstPrime(primes.get(value));
@@ -375,75 +377,61 @@ public class Chat extends JFrame implements ActionListener{
 	void initiateOption() 
 	{
 		int choice;
-		//String fileName;
 		int secondChoice;
 		String message = "Would you like to generate Public/Private Key pair Yourself?\n"
 			    + "Press Yes to create prime numbers\n"
 			    + "No will generate random prime numbers";
 		choice = JOptionPane.showConfirmDialog(null, message, "Generate Key Options", JOptionPane.YES_NO_OPTION);
-	        if (choice == JOptionPane.YES_OPTION) {
-	        	secondChoice = JOptionPane.showConfirmDialog(null, "Choose your File to load from (YES)\nInput yor own primes(NO)?", "Generate Key Options", JOptionPane.YES_NO_OPTION);
-		        if (secondChoice == JOptionPane.YES_OPTION) {
-		        	JFileChooser fileChooser = new JFileChooser();
-					fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); // specify current working directory
-					int result = fileChooser.showOpenDialog(this);
-					if (result == JFileChooser.APPROVE_OPTION) {
+	        if (choice == JOptionPane.YES_OPTION) 
+	        {
+	        		secondChoice = JOptionPane.showConfirmDialog(null, "Choose your File to load from (YES)\nInput yor own primes(NO)?", "Generate Key Options", JOptionPane.YES_NO_OPTION);
+	        		if (secondChoice == JOptionPane.YES_OPTION) 
+	        		{
+	        			JFileChooser fileChooser = new JFileChooser();
+	        			fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir"))); // specify current working directory
+	        			int result = fileChooser.showOpenDialog(this);
+					if (result == JFileChooser.APPROVE_OPTION) 
+					{
 					    File selectedFile = fileChooser.getSelectedFile();
-					    //fileName = selectedFile.getName(); // store filename 
-					    //System.out.println("Selected file: " + fileName  +  ", and path: "+ selectedFile.getAbsolutePath());
-					    //System.out.println(selectedFile.getAbsolutePath());
 					    readPrimes(selectedFile.getAbsolutePath());
 					}
 		          return;
 		        }
 		        else
 		        {
-		        	RSA tempRSA = null;
-		        	boolean checkRSA;
-		        	try {
-		        		setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
-		        		setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
-		        	 	tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-			        	checkRSA = tempRSA.isInputValid();
-		        	}
-		        	catch(NumberFormatException e) {
-		        		checkRSA = false;
-		        	}
-		        	catch(ArithmeticException e) {
-		        		checkRSA = false;
-		        	}
-		        	//make rsa thing here
-		        
-		       
-		       
-		        	
-			    //testing for RSA encryptions
-			    if(checkRSA ==  false) {
-			    		//repromptUser
-			    		while(checkRSA ==  false) {
-			    		 	setFirstPrime(JOptionPane.showInputDialog(this, "ERROR please type in your First Prime Number:"));
-				        	setSecondPrime(JOptionPane.showInputDialog(this, "ERROR please type in your Second Prime Number:"));
-				        	//make rsa thing here
-					    tempRSA = new RSA(getFirstPrime(), getSecondPrime());
-					    checkRSA = tempRSA.isInputValid();
-			    		}
-			    }
-			    else {
-			    		mainRSA = tempRSA;
-			    }
-			    
-			    
-			    
-			    
-			  
-			    
-				   
-				    
-				 
+			        	RSA tempRSA = null;
+			        	boolean checkRSA;
+			        	try {
+			        		setFirstPrime(JOptionPane.showInputDialog(this, "Type in your First Prime Number:"));
+			        		setSecondPrime(JOptionPane.showInputDialog(this, "Type in your Second Prime Number:"));
+			        	 	tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+				        	checkRSA = tempRSA.isInputValid();
+			        	}
+			        	catch(NumberFormatException e) {
+			        		checkRSA = false;
+			        	}
+			        	catch(ArithmeticException e) {
+			        		checkRSA = false;
+			        	}
+				    //testing for RSA encryptions
+				    if(checkRSA ==  false) {
+				    		//repromptUser
+				    		while(checkRSA ==  false) {
+				    		 	setFirstPrime(JOptionPane.showInputDialog(this, "ERROR please type in your First Prime Number:"));
+					        	setSecondPrime(JOptionPane.showInputDialog(this, "ERROR please type in your Second Prime Number:"));
+					        	//make rsa thing here
+						    tempRSA = new RSA(getFirstPrime(), getSecondPrime());
+						    checkRSA = tempRSA.isInputValid();
+				    		}
+				    }
+				    else {
+				    		mainRSA = tempRSA;
+				    }
 		        }
 	        }
-	        else {
-	        	readPrimes("Resource//primeNumbers.rsc");
+	        else 
+	        {
+	        		readPrimes("Resource//primeNumbers.rsc");
 	        }
 	}
 	
@@ -461,6 +449,13 @@ public class Chat extends JFrame implements ActionListener{
 		leaveChat.setEnabled(false);
 		client.closeConnection();
 	}
+	
+	public void clearUserList()
+	{
+		ClientList cl = ClientList.getClientBox();
+		cl.emptyClientList();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{
