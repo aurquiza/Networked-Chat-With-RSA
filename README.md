@@ -20,5 +20,10 @@ Those prime numbers are being validated
    Multiple-People-Messages: if on WINDOWS you hold ctrl and click on users you want to send message to.
                              if on MAC you hold command then click on users you want to send message to.
                              
+# Running programs for server and client
+   Running Server - Click and run the startServer file to run the server program
+   Running Client - Click and run the startClient file to run the client program
+   
+                             
 # Location of Prime number file
    location on github is "Resource/primeNumbers.rsc"
