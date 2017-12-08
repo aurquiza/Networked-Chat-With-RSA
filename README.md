@@ -14,3 +14,11 @@ Those prime numbers are being validated
 5. When successfully joining chat User can see list of all connected clients, and can select single or multiple people to send message to
    All connected clients have updated information about new user and can send/receive message between them. 
    Client can Leave chat and Join back.
+   
+# Sending Messages
+   Single-Person-Messages: in order to send messages you must click on the user you want to send a message to.
+   Multiple-People-Messages: if on WINDOWS you hold ctrl and click on users you want to send message to.
+                             if on MAC you hold command then click on users you want to send message to.
+                             
+# Location of Prime number file
+   location on github is "Resource/primeNumbers.rsc"
