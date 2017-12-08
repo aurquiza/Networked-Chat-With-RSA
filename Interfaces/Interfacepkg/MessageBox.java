@@ -1,3 +1,8 @@
+/*
+ * This is the JPanel in the gui for the messages the client will recieve and send.
+ * This will also let the user know if a connection was made or if the user successfully disconnected
+ * 
+ */
 package Interfacepkg;
   
 import java.awt.Color;
